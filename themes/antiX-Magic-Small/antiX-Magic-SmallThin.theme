@@ -1,0 +1,124 @@
+ThemeName=                                 "antiX-Magic-SmallThin"
+ThemeAuthor=                               "BobC"
+ThemeDescription=                          ".."
+License=                                   "GPLv3"
+#based on ThemeName=                       "Materia-Briz-Dark"
+#based on ThemeAuthor=                     "rainerhg7"
+
+### Purpose: Small thin screen layout to maximize available space on school laptops.  
+###  Corresponding ~/.icewm/preferences or ~/.icewm/prefoverride settings 
+###   reccomended as follows:
+#WorkspaceNames=" 1 ", " 2 "," 3 "," 4 "
+#TaskBarDoubleHeight=1
+#TaskBarAutoHide=1
+#TaskBarGraphHeight=16
+
+Look=                                      flat
+Gradients=                                 "taskbuttonactive.xpm taskbuttonbg.xpm taskbuttonminimized.xpm dialogbg.xpm logoutbg.xpm workspacebuttonactive.xpm menusel.xpm"
+
+RolloverButtonsSupported=                  1
+RolloverButtonsSupported=                  1
+TitleButtonsRight="xmi"
+TitleButtonsSupported="xmis"		# Close, Maximize, Minimize, menuButton
+
+TaskBarClockLeds=                          0
+TrayDrawBevel=                             0
+BorderSizeX=                               5
+BorderSizeY=                               5
+DlgBorderSizeX=                            5
+DlgBorderSizeY=                            5
+CornerSizeX=                               20
+CornerSizeY=                               20
+TitleBarHeight=                            16
+TitleBarJustify=                           50
+#ScrollBarX=                                12
+#ScrollBarY=                                12
+
+MenuIconSize=                              20
+SmallIconSize=                             16
+LargeIconSize=                             24
+HugeIconSize=                              48
+
+#Fonts
+TitleFontNameXft=                          "carlito:size=11"
+StatusFontNameXft=                         "carlito:size=11"
+MenuFontNameXft=                           "carlito:size=11"
+NormalTaskBarFontNameXft=                  "carlito:size=11"
+ActiveTaskBarFontNameXft=                  "carlito:size=11"
+ListBoxFontNameXft=                        "carlito:size=11"
+ToolTipFontNameXft=                        "carlito:size=11"
+QuickSwitchFontNameXft=                    "carlito:size=12"
+ClockFontNameXft=                          "carlito:size=11"
+
+#DialogBox
+ColorDialog=                               "rgb:30/30/30"
+ColorDialogSelectionText=                  "rgb:28/28/28"
+
+#Taskbar
+ColorDefaultTaskBar=                       "rgb:23/27/29"
+ColorToolButton=                           "rgb:23/27/29"
+ColorActiveButton=                         "rgb:5A/5A/5A"
+ColorNormalButton=                         "rgb:23/27/29"
+ColorToolButtonText=                       "rgb:23/27/29"
+ColorNormalWorkspaceButtonText=            "rgb:B4/B5/B6"
+ColorActiveWorkspaceButtonText=            "rgb:F8/F9/FA"
+ColorNormalButtonText=                     "rgb:F8/F9/FA"
+ColorActiveButtonText=                     "rgb:F8/F9/FA"
+ColorActiveTaskBarApp=                     "rgb:25/68/AF"
+ColorActiveTaskBarAppText=                 "rgb:FF/FF/FF"
+ColorMinimizedTaskBarApp=                  "rgb:30/30/30"
+ColorMinimizedTaskBarAppText=              "rgb:A4/A5/A6"
+ColorNormalTaskBarApp=                     "rgb:23/27/29"
+ColorNormalTaskBarAppText=                 "rgb:F8/F9/FA"
+ColorInvisibleTaskBarApp=                  "rgb:30/30/30"
+ColorInvisibleTaskBarAppText=              "rgb:23/27/29"
+
+#Menu
+ColorActiveMenu=                           "rgb:40/40/40"
+ColorNormalMenu=                           "rgb:30/30/30"
+ColorActiveMenuItem=                       "rgb:5A/5A/5A"
+ColorNormalMenuItemText=                   "rgb:EE/EE/EE"
+ColorActiveMenuItemText=                   "rgb:FD/FD/FD"
+ColorActiveMenuItemShadow=                 "rgb:FF/FF/FF"
+ColorDisabledMenuItemText=                 "rgb:80/80/80"
+ColorDisabledMenuItemShadow=               "rgb:00/00/00"
+
+#TitleBox
+ColorNormalBorder=                         "rgb:F8/F9/FA"
+ColorActiveBorder=                         "rgb:F8/F9/FA"
+ColorNormalTitleBarText=                   "rgb:99/97/A2"
+ColorActiveTitleBarText=                   "rgb:F8/F9/FA"
+
+#Move
+ColorMoveSizeStatus=                       "rgb:30/30/30"
+ColorMoveSizeStatusText=                   "rgb:F8/F9/FA"
+
+#Tooltip
+ColorToolTip=                              "rgb:30/30/30"
+ColorToolTipText=                          "rgb:F8/F9/FA"
+
+#QuickSwitch
+ColorQuickSwitch=                          "rgb:30/30/30"
+ColorQuickSwitchText=                      "rgb:A4/A5/A6"
+
+#ListBox
+ColorListBox=                              "rgb:30/30/30"
+ColorListBoxText=                          "rgb:F8/F9/FA"
+ColorListBoxSelection=                     "rgb:6A/A8/E9"
+ColorListBoxSelectionText=                 "rgb:F8/F9/FA"
+
+#Label
+ColorLabel=                                "rgb:30/30/30"
+ColorLabelText=                            "rgb:F8/F9/FA"
+
+#Clock
+ColorClock=                                "rgb:30/30/30"
+ColorClockText=                            "rgb:F8/F9/FA"
+
+#ScrollBar
+ColorScrollBar=                            "rgb:30/30/30"
+ColorScrollBarButton=                      "rgb:F8/F9/FA"
+ColorScrollBarSlider=                      "rgb:30/30/30"
+ColorScrollBarArrow=                       "rgb:30/30/30"
+ColorScrollBarButtonArrow=                 "rgb:F8/F9/FA"
+ColorScrollBarInactiveArrow=               "rgb:F8/F9/FA"

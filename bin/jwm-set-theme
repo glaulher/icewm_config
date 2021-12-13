@@ -1,0 +1,32 @@
+#!/bin/bash
+
+restart=false
+theme=""
+
+if [ "$1" == "-h" ] || [ "$1" == "--help" ] || [ $# -lt 1 ] ; then
+	echo "
+      jwm-set-theme [-h|--help] [[-r|--restart]theme]
+      
+   Sets the theme for jwm.
+
+      -h|--help      Show this help.
+      -r|--restart   Restart jwm after setting theme.
+
+   theme
+      The name of the theme (the file name).
+      This file must be in ~/.jwm/themes
+"
+else
+   if [ "$1" == "-r" ] || [ "$1" == "--restart" ] ; then
+      restart=true
+      theme="$2"
+   else
+      theme="$1"
+   fi
+
+   cp -a "$HOME/.jwm/themes/$theme" "$HOME/.jwm/theme"
+
+   if $restart ; then
+      jwm -restart
+  fi
+fi

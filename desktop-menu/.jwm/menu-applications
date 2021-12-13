@@ -1,0 +1,150 @@
+<JWM>
+<Menu label="antiX" icon="/usr/share/icons/papirus-antix/48x48/categories/distributor-logo-antix.png" >
+<Program label="Android Device USB Connect" icon="/usr/share/icons/papirus-antix/48x48/devices/smartphone.png">/usr/local/bin/android-device-usb-connect.sh</Program>
+<Program label="antiX autoremove" icon="/usr/share/icons/papirus-antix/48x48/categories/debian-logo.png">/usr/local/bin/yad-autoremove</Program>
+<Program label="antiX Updater" icon="/usr/share/icons/papirus-antix/48x48/categories/software-sources.png">/usr/local/bin/yad-updater</Program>
+<Program label="antiX User Manager" icon="/usr/share/icons/papirus-antix/48x48/categories/user-manager.png">su-to-root -X -c antix-user</Program>
+<Program label="Backlight Brightness" icon="/usr/share/icons/papirus-antix/48x48/categories/backlight-brightness.png">x-terminal-emulator -e backlight-brightness --pause</Program>
+<Program label="Change WiFi program" icon="/usr/share/icons/papirus-antix/48x48/categories/connman.png">/usr/local/bin/antix-wifi-switch</Program>
+<Program label="Chroot Rescue Scan" icon="/usr/share/icons/papirus-antix/48x48/categories/rescuetime.png">x-terminal-emulator -e sudo chroot-rescue-scan --pause</Program>
+<Program label="CLI APT-based Package Manager" icon="/usr/share/icons/papirus-antix/48x48/categories/system-software-install.png">x-terminal-emulator -e sudo /usr/local/bin/cli-aptiX --pause</Program>
+<Program label="Command Line Control Centre" icon="/usr/share/icons/papirus-antix/48x48/categories/command-line-control-centre.png">x-terminal-emulator -e antiX-cli-cc</Program>
+<Program label="Configure Persistence" icon="/usr/share/icons/papirus-antix/48x48/categories/persist-config.png">su-to-root -X -c persist-config</Program>
+<Program label="Date and Time" icon="/usr/share/icons/papirus-antix/48x48/categories/time.png">/usr/local/bin/set_time-and_date.sh</Program>
+<Program label="Format USB" icon="/usr/share/pixmaps/formatusb.png">su-to-root -X -c "formatusb"</Program>
+<Program label="IceWM Toolbar Icon Manager" icon="/usr/share/icons/papirus-antix/48x48/categories/icewm_editor.png">/usr/local/bin/icewm-toolbar-icon-manager.sh</Program>
+<Program label="ISO Snapshot" icon="/usr/share/icons/papirus-antix/48x48/categories/iso-snapshot.png">su-to-root -X -c iso-snapshot</Program>
+<Program label="Live-USB Kernel Updater" icon="/usr/share/icons/papirus-antix/48x48/categories/live-usb-kernel-updater.png">x-terminal-emulator -e sudo /usr/local/bin/live-kernel-updater --pause</Program>
+<Program label="Live USB Maker" icon="/usr/share/icons/papirus-antix/48x48/categories/live-usb-maker.png">su-to-root -X -c live-usb-maker-gui-antix</Program>
+<Program label="Login Manager" icon="/usr/share/icons/papirus-antix/48x48/devices/computer.png">su-to-root -X -c /usr/local/bin/login-config-antix</Program>
+<Program label="Personal Menu Editor" icon="/usr/share/icons/papirus-antix/48x48/categories/icewm_peditor.png">/usr/local/bin/fast_personal_menu_editor.sh</Program>
+<Program label="Remaster" icon="/usr/share/icons/papirus-antix/48x48/categories/remastersys.png">su-to-root -X -c live-remaster</Program>
+<Program label="Save Persistence Changes" icon="/usr/share/icons/papirus-antix/48x48/categories/palimpsest.png">su-to-root -X -c persist-save</Program>
+<Program label="Set up Persistence" icon="/usr/share/icons/papirus-antix/48x48/categories/persist-makefs.png">su-to-root -X -c persist-makefs</Program>
+<Program label="User Language" icon="/usr/share/icons/papirus-antix/48x48/categories/preferences-desktop-locale.png">locale-antix</Program>
+<Program label="yad-color" icon="/usr/share/icons/papirus-antix/48x48/categories/gcolor2.png">yad-color</Program>
+</Menu>
+<Separator/>
+<Menu label="Accessories" icon="/usr/share/icons/papirus-antix/48x48/categories/applications-accessories.png" >
+<Program label="Archive Manager" icon="/usr/share/icons/org.gnome.ArchiveManager.png">file-roller </Program>
+<Program label="Calcurse" icon="/usr/share/icons/papirus-antix/48x48/categories/evolution-calendar.png">desktop-defaults-run -t calcurse</Program>
+<Program label="CherryTree" icon="/usr/share/icons/papirus-antix/48x48/categories/cherrytree.png">cherrytree </Program>
+<Program label="ClipIt" icon="/usr/share/icons/papirus-antix/48x48/categories/clipit-trayicon.png">clipit</Program>
+<Program label="Firejail Configuration Wizard" icon="/usr/share/icons/papirus-antix/48x48/categories/firejail-ui.png">firejail-ui</Program>
+<Program label="Galculator" icon="/usr/share/icons/papirus-antix/48x48/categories/galculator.png">galculator</Program>
+<Program label="Leafpad" icon="/usr/share/icons/papirus-antix/48x48/categories/leafpad.png">leafpad </Program>
+<Program label="Midnight Commander Editor" icon="/usr/share/icons/papirus-antix/48x48/categories/MidnightCommander.png">x-terminal-emulator -e mcedit</Program>
+<Program label="Other Desktops" icon="/usr/share/icons/papirus-antix/48x48/places/user-desktop.png">/usr/local/lib/desktop-session/desktop-session-menu-window ignore-settings</Program>
+<Program label="Rxvt Color Unicode Terminal" icon="/usr/share/icons/papirus-antix/48x48/categories/terminal.png">urxvt</Program>
+<Program label="Searchmonkey" icon="/usr/share/icons/papirus-antix/48x48/categories/searchmonkey.png">searchmonkey</Program>
+<Program label="Xfburn" icon="/usr/share/icons/papirus-antix/48x48/devices/media-cdrom.png">xfburn</Program>
+<Program label="zzzFM File Search" icon="/usr/share/pixmaps/zzzfm-find.png">zzzfm --find-files </Program>
+</Menu>
+<Menu label="Games" icon="/usr/share/icons/papirus-antix/48x48/categories/applications-games.png" >
+<Program label="DOSBox Emulator" icon="/usr/share/icons/papirus-antix/48x48/categories/dosbox.png">dosbox</Program>
+<Program label="Mahjongg" icon="/usr/share/icons/papirus-antix/48x48/categories/org.gnome.Mahjongg.png">gnome-mahjongg</Program>
+</Menu>
+<Menu label="Graphics" icon="/usr/share/icons/papirus-antix/48x48/categories/applications-graphics.png" >
+<Program label="Document Scanner" icon="/usr/share/icons/papirus-antix/48x48/devices/scanner.png">simple-scan</Program>
+<Program label="Gtkam Digital Camera Browser" icon="/usr/share/icons/papirus-antix/48x48/categories/gtkam-camera.png">gtkam</Program>
+<Program label="LibreOffice Draw" icon="/usr/share/icons/papirus-antix/48x48/categories/libreoffice-draw.png">libreoffice --draw </Program>
+<Program label="Mirage" icon="/usr/share/icons/papirus-antix/48x48/categories/mirage.png">mirage </Program>
+<Program label="mtPaint Graphic Editor" icon="/usr/share/icons/papirus-antix/48x48/categories/mtpaint.png">mtpaint </Program>
+<Program label="Screenshot" icon="/usr/share/icons/papirus-antix/48x48/categories/gnome-screenshot.png">antixscreenshot.sh</Program>
+</Menu>
+<Menu label="Internet" icon="/usr/share/icons/papirus-antix/48x48/categories/preferences-system-network.png" >
+<Program label="Ceni" icon="/usr/share/icons/papirus-antix/48x48/categories/ceni.png">desktop-defaults-run -t su-to-root -c /usr/sbin/Ceni</Program>
+<Program label="Claws Mail" icon="/usr/share/icons/papirus-antix/48x48/categories/claws-mail.png">claws-mail </Program>
+<Program label="Connectshares" icon="/usr/share/icons/papirus-antix/48x48/categories/connectshares.png">connectshares</Program>
+<Program label="Connectshares Configuration" icon="/usr/share/icons/papirus-antix/48x48/categories/connectshares-config.png">connectshares-config</Program>
+<Program label="Connman UI Setup" icon="/usr/share/icons/papirus-antix/48x48/categories/preferences-system-network.png">cmst</Program>
+<Program label="Dillo" icon="/usr/share/icons/papirus-antix/48x48/categories/dillo.png">dillo </Program>
+<Program label="Disconnectshares" icon="/usr/share/icons/papirus-antix/48x48/categories/disconnectshares.png">disconnectshares</Program>
+<Program label="Droopy" icon="/usr/share/icons/papirus-antix/48x48/categories/droopy.png">droopy.sh</Program>
+<Program label="Firefox ESR" icon="/usr/share/icons/papirus-antix/48x48/categories/firefox-esr.png">/usr/lib/firefox-esr/firefox-esr </Program>
+<Program label="gFTP" icon="/usr/share/icons/papirus-antix/48x48/categories/gftp.png">gftp-gtk </Program>
+<Program label="GNOME PPP" icon="/usr/share/icons/papirus-antix/48x48/categories/gnome-ppp.png">gnome-ppp</Program>
+<Program label="HexChat" icon="/usr/share/icons/papirus-antix/48x48/categories/hexchat.png">hexchat --existing </Program>
+<Program label="Links 2" icon="/usr/share/icons/papirus-antix/48x48/categories/links2.png">xlinks2</Program>
+<Program label="Search Bar" icon="/usr/share/icons/papirus-antix/48x48/categories/eye-icon.png">search-bar</Program>
+<Program label="Transmission" icon="/usr/share/icons/papirus-antix/48x48/categories/transmission.png">transmission-gtk </Program>
+<Program label="WPA Gui" icon="/usr/share/icons/papirus-antix/48x48/categories/wpa_gui.png">/usr/sbin/wpa_gui</Program>
+</Menu>
+<Menu label="Multimedia" icon="/usr/share/icons/papirus-antix/48x48/categories/applications-multimedia.png" >
+<Program label="Alsamixer" icon="/usr/share/icons/papirus-antix/48x48/categories/alsamixer-equalizer.png">x-terminal-emulator -e alsamixer</Program>
+<Program label="Alsamixer Equalizer" icon="/usr/share/icons/papirus-antix/48x48/categories/alsamixer-equalizer.png">x-terminal-emulator -e alsamixer -D equalizer</Program>
+<Program label="Asunder CD Ripper" icon="/usr/share/icons/papirus-antix/48x48/categories/asunder.png">asunder </Program>
+<Program label="Celluloid" icon="/usr/share/icons/papirus-antix/48x48/categories/io.github.celluloid_player.Celluloid.png">celluloid </Program>
+<Program label="GUVCView" icon="/usr/share/icons/papirus-antix/48x48/categories/guvcview.png">guvcview</Program>
+<Program label="MPV Media Player" icon="/usr/share/icons/papirus-antix/48x48/categories/mpv.png">mpv --player-operation-mode=pseudo-gui -- </Program>
+<Program label="Poor Man's Radio Player" icon="/usr/share/icons/papirus-antix/48x48/categories/library-internet-radio.png">x-terminal-emulator -e pmrp</Program>
+<Program label="SMTube" icon="/usr/share/icons/papirus-antix/48x48/categories/smtube.png">smtube</Program>
+<Program label="Sound Card Chooser" icon="/usr/share/icons/papirus-antix/48x48/categories/soundcard.png">alsa-set-default-card</Program>
+<Program label="Streamlight" icon="/usr/share/pixmaps/streamlight-gui-launcher.png">streamlight-gui-launcher.sh</Program>
+<Program label="Streamtuner2" icon="/usr/share/icons/papirus-antix/48x48/categories/streamtuner2.png">streamtuner2</Program>
+<Program label="WinFF" icon="/usr/share/icons/papirus-antix/48x48/categories/winff.png">winff </Program>
+<Program label="XMMS" icon="/usr/share/icons/papirus-antix/48x48/categories/xmms.png">xmms</Program>
+<Program label="Youtube video player" icon="/usr/share/icons/papirus-antix/48x48/categories/youtube.png">x-terminal-emulator -e /usr/local/bin/ytfzf</Program>
+</Menu>
+<Menu label="Office" icon="/usr/share/icons/papirus-antix/48x48/categories/applications-office.png" >
+<Program label="LibreOffice" icon="/usr/share/icons/papirus-antix/48x48/categories/libreoffice-startcenter.png">libreoffice </Program>
+<Program label="LibreOffice Calc" icon="/usr/share/icons/papirus-antix/48x48/categories/libreoffice-calc.png">libreoffice --calc </Program>
+<Program label="LibreOffice Draw" icon="/usr/share/icons/papirus-antix/48x48/categories/libreoffice-draw.png">libreoffice --draw </Program>
+<Program label="LibreOffice Impress" icon="/usr/share/icons/papirus-antix/48x48/categories/libreoffice-impress.png">libreoffice --impress </Program>
+<Program label="LibreOffice Math" icon="/usr/share/icons/papirus-antix/48x48/categories/libreoffice-math.png">libreoffice --math </Program>
+<Program label="LibreOffice Writer" icon="/usr/share/icons/papirus-antix/48x48/categories/libreoffice-writer.png">libreoffice --writer </Program>
+<Program label="qpdfview" icon="/usr/share/icons/papirus-antix/48x48/categories/qpdfview.png">qpdfview --unique </Program>
+</Menu>
+<Menu label="Preferences" icon="/usr/share/icons/papirus-antix/48x48/categories/preferences-desktop.png" >
+<Program label="Adblock" icon="/usr/share/icons/papirus-antix/48x48/categories/advert-block.png">su-to-root -X -c block-advert.sh</Program>
+<Program label="Add Key" icon="/usr/share/icons/papirus-antix/48x48/categories/preferences-desktop-keyboard-shortcuts.png">add-key</Program>
+<Program label="Add Menu Item" icon="/usr/share/icons/papirus-antix/48x48/categories/add-menu-item.png">add-desktop</Program>
+<Program label="ADSL/PPPOE Configuration" icon="/usr/share/icons/papirus-antix/48x48/categories/pppoeconf.png">x-terminal-emulator -e /usr/sbin/pppoeconf</Program>
+<Program label="Alternatives Configurator" icon="/usr/share/icons/papirus-antix/48x48/categories/galternatives.png">gksu /usr/bin/galternatives</Program>
+<Program label="ARandR" icon="/usr/share/icons/papirus-antix/48x48/devices/display.png">arandr</Program>
+<Program label="Bluetooth Manager" icon="/usr/share/icons/papirus-antix/48x48/categories/blueman.png">blueman-manager</Program>
+<Program label="Configure Automount" icon="/usr/share/icons/papirus-antix/48x48/categories/mountbox.png">automount-config</Program>
+<Program label="Connman UI Setup" icon="/usr/share/icons/papirus-antix/48x48/categories/preferences-system-network.png">cmst</Program>
+<Program label="Customize Look and Feel" icon="/usr/share/icons/papirus-antix/48x48/categories/preferences-desktop-theme.png">lxappearance</Program>
+<Program label="Desktop Preferences" icon="/usr/share/icons/papirus-antix/48x48/places/user-desktop.png">pcmanfm --desktop-pref</Program>
+<Program label="Menu Manager" icon="/usr/share/icons/papirus-antix/48x48/categories/menu-editor.png">sudo menu_manager.sh</Program>
+<Program label="Mouse Configuration" icon="/usr/share/icons/papirus-antix/48x48/devices/input-mouse.png">ds-mouse</Program>
+<Program label="Print Settings" icon="/usr/share/icons/papirus-antix/48x48/devices/printer.png">system-config-printer</Program>
+<Program label="Qt5 Settings" icon="/usr/share/icons/papirus-antix/48x48/categories/qtcreator.png">qt5ct</Program>
+<Program label="Remove Menu Item" icon="/usr/share/icons/papirus-antix/48x48/categories/remove-menu-item.png">remove-desktop</Program>
+<Program label="Screenlight" icon="/usr/share/icons/papirus-antix/48x48/categories/screenlight.png">screenlight-menu.sh</Program>
+<Program label="Set Font Size DPI" icon="/usr/share/icons/papirus-antix/48x48/categories/fonts.png">gksu set-dpi</Program>
+<Program label="Synaptic Package Manager" icon="/usr/share/icons/papirus-antix/48x48/categories/synaptic.png">su-to-root -X -c /usr/sbin/synaptic</Program>
+<Program label="System Keyboard" icon="/usr/share/icons/system-keyboard-qt.png">su-to-root -X -c system-keyboard-qt</Program>
+<Program label="User Language" icon="/usr/share/icons/papirus-antix/48x48/categories/preferences-desktop-locale.png">locale-antix</Program>
+<Program label="Wallpaper" icon="/usr/share/icons/papirus-antix/48x48/categories/preferences-desktop-wallpaper.png">/usr/local/bin/wallpaper</Program>
+</Menu>
+<Menu label="Programming" icon="/usr/share/icons/papirus-antix/48x48/categories/applications-development.png" >
+<Program label="Geany" icon="/usr/share/icons/papirus-antix/48x48/categories/geany.png">geany </Program>
+<Program label="Vim.tiny" icon="/usr/share/icons/papirus-antix/48x48/categories/vim.png">desktop-defaults-run -t vim </Program>
+</Menu>
+<Menu label="System" icon="/usr/share/icons/papirus-antix/48x48/categories/preferences-system.png" >
+<Program label="App Select" icon="/usr/share/icons/papirus-antix/48x48/categories/gnome-searchtool.png">/usr/local/bin/app-select</Program>
+<Program label="Boot Repair" icon="/usr/share/icons/papirus-antix/48x48/categories/bootrepair.png">su-to-root -X -c bootrepair</Program>
+<Program label="Control Centre" icon="/usr/share/icons/papirus-antix/48x48/categories/control-centre.png">antixcc.sh</Program>
+<Program label="File Manager PCManFM" icon="/usr/share/icons/papirus-antix/48x48/categories/system-file-manager.png">pcmanfm </Program>
+<Program label="Firetools" icon="/usr/share/icons/papirus-antix/48x48/categories/firetools.png">firetools</Program>
+<Program label="GParted" icon="/usr/share/icons/papirus-antix/48x48/categories/gparted.png">gksu gparted</Program>
+<Program label="Grsync" icon="/usr/share/icons/papirus-antix/48x48/categories/grsync.png">/usr/bin/grsync -i </Program>
+<Program label="Htop" icon="/usr/share/icons/papirus-antix/48x48/categories/htop.png">urxvt -e htop</Program>
+<Program label="luckyBackup" icon="/usr/share/icons/papirus-antix/48x48/categories/luckybackup.png">/usr/bin/luckybackup</Program>
+<Program label="luckyBackup as Super User" icon="/usr/share/icons/papirus-antix/48x48/categories/luckybackup.png">su-to-root -X -c /usr/bin/luckybackup</Program>
+<Program label="Midnight Commander" icon="/usr/share/icons/papirus-antix/48x48/categories/MidnightCommander.png">x-terminal-emulator -e mc</Program>
+<Program label="Mountbox" icon="/usr/share/icons/papirus-antix/48x48/categories/mountbox.png">mountbox</Program>
+<Program label="Network Assistant" icon="/usr/share/icons/papirus-antix/48x48/categories/network-assistant.png">su-to-root -X -c network-assistant</Program>
+<Program label="Package Installer" icon="/usr/share/icons/papirus-antix/48x48/categories/packageinstaller.png">su-to-root -X -c packageinstaller</Program>
+<Program label="PC Information" icon="/usr/share/icons/papirus-antix/48x48/categories/info_blue.png">inxi-gui</Program>
+<Program label="Repo Manager" icon="/usr/share/icons/papirus-antix/48x48/categories/repo-manager.png">su-to-root -X -c repo-manager</Program>
+<Program label="Root Terminal" icon="/usr/share/icons/papirus-antix/48x48/categories/gksu-root-terminal.png">gksu /usr/bin/x-terminal-emulator</Program>
+<Program label="ROX Filer" icon="/usr/share/icons/papirus-antix/48x48/categories/rox-filer.png">/usr/bin/rox-filer</Program>
+<Program label="ROX Filer as root" icon="/usr/share/icons/papirus-antix/48x48/categories/rox-filer-root.png">sudo rox-filer</Program>
+<Program label="ROXTerm" icon="/usr/share/icons/papirus-antix/48x48/categories/roxterm.png">roxterm</Program>
+<Program label="Task Manager" icon="/usr/share/icons/papirus-antix/48x48/categories/utilities-system-monitor.png">lxtask</Program>
+<Program label="zzzFM" icon="/usr/share/pixmaps/zzzfm.png">zzzfm </Program>
+</Menu>
+</JWM>

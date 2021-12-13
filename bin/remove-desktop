@@ -1,0 +1,49 @@
+#!/bin/bash
+#add-desktop
+
+TEXTDOMAINDIR=/usr/share/locale
+TEXTDOMAIN=remove-desktop 
+
+function checkcancel {
+    CANOK="$?";
+    if [ "$CANOK" = "1" ]; then
+    exit;
+    fi
+}
+
+GetDesktopInformation() {
+    for file in $(ls $FILE_LOCATION | grep ".desktop")
+    do
+    echo "$file"
+        if [ "$CATEGORIES" = "X-Personal" ]; then
+            if grep "X-Personal" $FILE_LOCATION/$file 1>/dev/null ; then
+                echo "$file"
+            fi
+        fi
+    done | yad --title=$"Menu Manager" --center --width="400" --height="300" --text=$"Select the items to remove" --list --separator="" --column=$"Menu Files"
+    checkcancel;
+}
+
+SELECTED=$(yad --title=$"Desktop Manager" --center --width="400" --height="300" --text=$"Select the location you would like to remove the desktop file from"  --item-separator="|" --form --field=$"Item Location:CB" $"1) Application Menu|2) Desktop Shortcut|3) Personal")
+checkcancel;
+
+case $(echo $SELECTED | cut -d ")" -f1) in
+"1") #Application Menu 
+    FILE_LOCATION="$HOME/.local/share/applications/custom"
+    CATEGORIES=""
+    ;;
+"2") #Desktop Shortcut
+    FILE_LOCATION="$HOME/Desktop"
+    CATEGORIES=""
+    ;;
+"3") #Task Centric Menu
+    FILE_LOCATION="$HOME/.local/share/applications/TCM"
+    CATEGORIES="X-Personal"
+    ;;
+esac
+
+SELECTED=$(GetDesktopInformation)
+if [ -n "$SELECTED" ]; then
+    rm "$FILE_LOCATION/$SELECTED"
+fi
+

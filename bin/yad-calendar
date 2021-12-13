@@ -1,0 +1,42 @@
+#!/bin/bash
+################################
+
+Adicionar_evento(){
+# Dia sem evento, adicionar um...
+event=$(yad --width=800 --form --center --title="Calendar: $day ..." --field="") && event=${event%|*}
+space=" "
+text=$day$space$event
+echo $text >> $HOME/yad-calendar.txt
+exit
+}
+
+Editar_evento(){
+# Dia com evento já existente
+entrada=$(grep -h $day $HOME/yad-calendar.txt)
+line=($(grep -n $day $HOME/yad-calendar.txt | head -n 1 | cut -d: -f1))
+altered_entry=$(yad --width=800 --center --title="Editar evento existente" --undecorated --form --field="" "$entrada")
+#retirar ultima letra, desnecessária
+entry=${altered_entry%|*}
+#gravar texto na linha original:
+awk -v line=$line -v texto="$entry" 'NR=='line' {$0='texto'} { print }' $HOME/yad-calendar.txt > $HOME/yad-calendar.txt.TEMP
+cp $HOME/yad-calendar.txt.TEMP $HOME/yad-calendar.txt
+exit
+}
+
+import -f Adicionar_evento Editar_evento
+touch ~/yad-calendar.txt && [ -s ~/yad-calendar.txt ] || echo "28/06/2020 This is how yad-calendar entries work! Add ONLY ONE line per day, starting with the date. If nothing shows up in the calendar, try another date format like dd-mm-yyyy" > $HOME/yad-calendar.txt
+
+#ecrã principal
+day=$(yad --calendar --undecorated --mouse  --details=$HOME/yad-calendar.txt --button="X":1)
+if [[ $foo -eq 1 ]]; then
+    exit 1
+  fi
+#se não se seleccionou nenhum dia, sair simplesmente
+[ -z "$day" ] && exit
+
+#se dia seleccionado ver se tem conteudo prévio ou nao
+if grep -q $day $HOME/yad-calendar.txt; then
+   Editar_evento
+   else
+   Adicionar_evento
+fi

@@ -1,0 +1,235 @@
+#!/bin/bash
+
+pre="	<IconPath>"
+suf="</IconPath>"
+parents=false
+reverse=false
+help=false
+base=""
+fault=false
+file=false
+fileparam=false
+filepath=""
+restart=false
+list=""
+head="<JWM>"
+tail="	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/stock/48</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/stock/32</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/stock/16</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/status/48</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/status/32</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/status/16</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/places/48</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/places/32</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/places/16</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/mimetypes/48</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/mimetypes/32</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/mimetypes/16</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/emblems/48</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/emblems/32</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/emblems/16</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/devices/48</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/devices/32</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/devices/16</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/categories/48</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/categories/32</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/categories/16</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/apps/48</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/apps/32</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/apps/16</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/actions/48</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/actions/32</IconPath>
+	<IconPath>/usr/share/icons/Faenza-Cupertino-mini/actions/16</IconPath>
+	<IconPath>/usr/share/pixmaps</IconPath>
+	<IconPath>.jwm/images</IconPath>
+</JWM>
+"
+
+
+
+function process_arg() {
+	if $fileparam ; then
+		fileparam=false
+		filepath="$1"
+		return 1
+	fi
+
+	case "$1" in
+	"-p"|"--parents")
+		parents=true
+		return 1
+		;;            
+	"-v"|"--reverse")
+		reverse=true
+		return 1
+		;;            
+	"-h"|"--help")
+		help=true
+		return 1
+		;;            
+	"-f"|"--file")
+		file=true
+		fileparam=true
+		return 1
+		;;            
+	"-r"|"--restart")
+		restart=true
+		return 1
+		;;            
+	"")       
+		return 0
+		;;
+	*)
+	esac
+	
+	if [ "${1:0:1}" == "-" ] ; then
+		fault=true
+		echo "Unknown option:$1"
+	else
+		base="$1"
+	fi
+
+	return 1
+}
+
+
+
+function list_dirs() {
+	dirlist="$(ls -d $1*/)"
+	
+	if [ $? != "0" ] ; then
+		base=""
+		return 1
+	fi
+
+	while read line
+	do
+		if [ "$(ls -l ${line} | egrep -c '^d')" == "0" ] ; then
+			entry="$pre${line:0:${#line}-1}$suf"
+			if [ "$list" == "" ] ; then
+				list="${entry}"
+			elif $reverse ; then
+				list="${entry}\n${list}"
+			else
+				list="${list}\n${entry}"
+			fi
+		else
+			if $parents ; then
+				entry="$pre${line:0:${#line}-1}$suf"
+				if [ "$list" == "" ] ; then
+					list="${entry}"
+				elif $reverse ; then
+					list="${entry}\n${list}"
+				else
+					list="${list}\n${entry}"
+				fi
+			fi
+
+			list_dirs "${line}"
+		fi
+	done <<< "$dirlist"
+	
+	return 0
+}
+
+
+
+function get_theme_path() {
+	if [ "$base" == "" ] ; then
+		while read line
+		do
+			if [ ${line:0:20} == "gtk-icon-theme-name=" ] ; then
+				icons="${line:20}"
+
+				if [ -d "$HOME/.icons/$icons" ] ; then
+					base="$HOME/.icons/$icons/"
+					echo -e "Using theme $base"
+				elif [ -d "/usr/share/icons/$icons" ] ; then
+					base="/usr/share/icons/$icons/"
+					echo -e "Using theme $base"
+				fi
+			fi
+		done <"$HOME/.config/gtk-3.0/settings.ini"
+	fi
+}
+
+
+
+# process arguments
+for i in "$@"; do
+	process_arg "$i"
+done
+
+
+# if file option is not followed with another argument
+if $file && $fileparam ; then
+	fault=true
+fi
+
+
+
+if $help ; then
+	echo "
+   List directories under a base directory.
+   Used to list theme icon paths for jwm.
+
+   jwm-icon-paths [OPTIONS] [directory]
+
+   Options:
+      -h|--help        Display this help.
+      -v|--reverse     Output directory list in reverse order.
+      -p|--parents     Include directories that have child directories.
+      -f|--file        File path to output to. If not given outputs to terminal.
+      -r|--restart     Restart jwm after updating icon paths.
+      
+   directory
+      If not given the current icon theme is used.
+"
+elif $fault ; then
+	echo "   USAGE: jwm-icon-paths [OPTIONS] [directory]"
+	echo "      try jwm-icon-paths --help"
+	exit 2
+else
+	# if base not given then get current icon theme
+	if [ "$base" == "" ] ; then
+		get_theme_path
+	fi
+
+	if [ "$base" != "" ] ; then
+		if [ "${base:${#base}-1}" != "/" ] ; then
+			base="$base/"
+		fi
+
+		if [ "$base" != $"/usr/share/icons/Faenza-Cupertino-mini/" ] ; then
+			list_dirs "$base"
+			if [ "$list" != "" ] ; then
+				if $file ; then
+					echo -e "${head}\n${list}\n${tail}" > "$filepath"
+				else
+					echo -e "${head}\n${list}\n${tail}"
+				fi
+
+				if $restart ; then
+					jwm -restart
+				fi
+			else
+				exit 4
+			fi
+		else
+			if $file ; then
+				echo -e "${head}\n${tail}" > "$filepath"
+			else
+				echo -e "${head}\n${tail}"
+			fi
+
+			if $restart ; then
+				jwm -restart
+			fi
+		fi
+	else
+		echo "Could not find theme path"
+		exit 3
+	fi
+fi
+
+exit 0

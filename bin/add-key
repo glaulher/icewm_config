@@ -1,0 +1,479 @@
+#!/usr/bin/env python3
+# File Name: add-key
+# Dependencies: fluxbox or icewm or jwm, desktop_tool, Gtk, pyGtk,
+# python os mod, python re mod, python sys mod, yad
+# Version: 2.9
+# Purpose:  Add keybinds to fluxbox and / or jwm and / or icewm key files
+# Authors: Dave
+
+# Copyright (C) Tuesday, Feb. 7, 2011  by Dave / 
+# david.dejong02@gmail.com  or david@daveserver.info
+# License: gplv2
+# This file is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+#############################################################################
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk, Gdk, GObject, GLib, Gio, GdkPixbuf
+import re
+import os
+import sys
+import gettext
+gettext.install("add-key", "/usr/share/locale")
+
+USER_HOME = os.environ['HOME']
+DISPLAY = os.environ['DISPLAY']
+DISPLAY = re.sub(r':', '', DISPLAY)
+DISPLAY_SPLIT = DISPLAY.split('.')
+DISPLAY = DISPLAY_SPLIT[0]
+
+with open(USER_HOME+"/.desktop-session/desktop-code."+DISPLAY, "r") as f:
+    DESKTOP = f.readline()
+    DESKTOP = re.sub(r'\n', '', DESKTOP)
+    DESKTOP = re.sub(r'.*-', '', DESKTOP)
+    LOCATION=(USER_HOME+"/."+DESKTOP+"/keys")
+
+class Error:
+    def __init__(self, error):
+        dlg = Gtk.MessageDialog(parent=None, flags=0, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.OK, text="Error")
+        dlg.set_title(_("add-start error"))
+        dlg.format_secondary_text(error)
+        dlg.set_keep_above(True) # note: set_transient_for() is ineffective!
+        dlg.run()
+        dlg.destroy()
+       
+class Success:
+    def __init__(self, success):
+        dlg = Gtk.MessageDialog(parent=None, flags=0, message_type=Gtk.MessageType.INFO, buttons=Gtk.ButtonsType.OK, text="Success")
+        dlg.set_title(_("Successfully updated"))
+        dlg.format_secondary_text(success)
+        dlg.set_keep_above(True) # note: set_transient_for() is ineffective!
+        dlg.run()
+        dlg.destroy()
+       
+class Remove():
+    
+    def build_drop_box(self):
+        self.RemoveList = Gtk.ListStore(str)
+        self.RemoveList.append([_("No line Selected:")])
+        
+        for line in open(USER_HOME+"/."+DESKTOP+"/startup", "r"):
+            if "#" not in line:
+                line = re.sub(r'\n', '', line)
+                self.RemoveList.append([line])
+    
+        def icewm():
+            for line in open(LOCATION, "r"):
+                if "#" not in line:
+                    if re.search(r'^key', line):
+                        line = re.sub(r'\n', '', line)
+                        line = re.sub(r'key "', '', line)
+                        line = re.sub(r'"', ' = ', line)
+                        self.RemoveList.append([line])
+        
+        def fluxbox():
+            for line in open(LOCATION, "r"):
+                if "#" not in line:
+                    if re.search(r'^.*:', line):
+                        line = re.sub(r'\n', '', line)
+                        line = re.sub(r'Mod4', 'Super', line)
+                        line = re.sub(r'Mod1', 'Alt', line)
+                        split = line.split(' :')
+                        left = re.sub(r' ', ' + ', split[0])
+                        right = split[1]
+                        line = left+" = "+right
+                        self.RemoveList.append([line])
+        
+        def jwm():
+            for line in open(LOCATION, "r"):
+                if "#" not in line:
+                    if re.search(r'^<Key', line):
+                        line = re.sub(r'\n', '', line)
+                        line = re.sub(r'<Key ', '', line)
+                        line = re.sub(r'key="', ' ', line)
+                        line = re.sub(r'mask="A"', 'Alt +', line)
+                        line = re.sub(r'mask="C"', 'Control +', line)
+                        line = re.sub(r'mask="S"', 'Shift +', line)
+                        line = re.sub(r'">', ' = ', line)
+                        line = re.sub(r'</Key>', '', line)
+                        self.RemoveList.append([line])
+        
+        options = {"icewm" : icewm, "fluxbox" : fluxbox, "jwm" : jwm}
+        options[DESKTOP]()
+        
+        self.removeSelect = Gtk.ComboBox.new_with_model(self.RemoveList)
+        renderer_text = Gtk.CellRendererText()
+        self.removeSelect.pack_start(renderer_text, False)
+        self.removeSelect.add_attribute(renderer_text, "text", 0)
+        self.removeSelect.set_popup_fixed_width(True)
+        #removeSelect.connect('changed', self.changed_cb)
+        self.removeSelect.set_active(0)
+        self.selectBox.pack_start(self.removeSelect, False, False, 0)
+        self.removeSelect.show()
+        
+    def updateRemoveSelect(self):
+        #remove select box
+        self.selectBox.remove(self.removeSelect)
+        self.removeSelect.destroy()
+        #build drop box
+        self.build_drop_box()
+    
+    
+    def apply(self,widget):
+        def remove(lineMarker):
+            item = self.removeSelect.get_active()
+            lineNumber = 0
+            for line in open(LOCATION, "r"):
+                if "#" not in line:
+                    if re.search(r'^%s' % (lineMarker), line):
+                        lineNumber += 1
+                    if lineNumber == item:
+                        line_to_remove = line
+                    else:
+                        text = open((LOCATION+".new"), "a")
+                        text.write (line) 
+                        text.close()
+                else:
+                    text = open((LOCATION+".new"), "a")
+                    text.write (line) 
+                    text.close()
+                        
+            os_system_line="mv "+LOCATION+".new "+LOCATION
+            os.system(os_system_line)
+            Success(_("line has been removed"))
+            self.updateRemoveSelect()
+            
+                
+        def icewm():
+            lineMarker="key"
+            remove(lineMarker)
+            
+        def fluxbox():
+            lineMarker=".*:"
+            remove(lineMarker)
+        
+        def jwm():
+            lineMarker="<Key"
+            remove(lineMarker)
+        
+        options = {"icewm" : icewm, "fluxbox" : fluxbox, "jwm" : jwm}
+        options[DESKTOP]()
+                
+    def __init__(self):
+        
+        self.frame = Gtk.Frame()
+        self.frame.set_label(_("Remove Items"))
+        self.frame.set_border_width(10)
+        self.frame.show()
+        
+        self.vbox = Gtk.VBox()
+        self.frame.add(self.vbox)
+        self.vbox.show()
+        
+        label = Gtk.Label()
+        label.set_text(_("Line to Remove"))
+        self.vbox.pack_start(label, True, True, 0)
+        label.show()
+        
+        self.selectBox = Gtk.VBox()
+        self.vbox.pack_start(self.selectBox, True, True, 0)
+        self.selectBox.show()
+        
+        #build drop box
+        self.build_drop_box()
+        
+        self.label = Gtk.Label()
+        self.label.set_text(_("Remove"))
+        self.label.show()
+        
+        #BUTTON BOX
+        
+        buttonbox = Gtk.HButtonBox()
+        self.vbox.pack_start(buttonbox, True, True, 0)
+        buttonbox.show()
+        
+        remove = Gtk.Button.new_from_icon_name("gtk-remove", Gtk.IconSize(1))
+        #remove.set_label(_("Remove"))
+        remove.connect("clicked", self.apply)
+        buttonbox.pack_start(remove, False, False, 0)
+        remove.show()
+        
+        close = Gtk.Button.new_from_icon_name("gtk-close", Gtk.IconSize(1))
+        #close.set_label(_("Close"))
+        close.connect("clicked", lambda w: Gtk.main_quit())
+        buttonbox.add(close)
+        close.show()
+        
+
+       
+class Add():
+    def apply(self, widget):
+        self.write_line=""
+        model = self.key1.get_model()
+        index = self.key1.get_active()
+        first_key = model[index][0]
+        model = self.key2.get_model()
+        index = self.key2.get_active()
+        second_key = model[index][0]
+        third_key = self.key3.get_text()
+        command_to_add = self.command.get_text()
+        if ( first_key == "Select first key:" ):
+            sys.exit(Error("You need to enter a valid first key"))
+        if ( second_key == "Select second key:" ):
+            sys.exit(Error("You need to enter a valid second key"))
+        if ( third_key == "" ) or ( third_key == "third key (letter of number)" ):
+            sys.exit(Error("You need to enter a valid third key"))
+        if ( command_to_add == "" ) or ( command_to_add == "command" ):
+            sys.exit(Error("You need to enter a valid command"))
+            
+        def Control():
+            def icewm():
+                key='Ctrl+'
+                self.write_line= self.write_line+key
+            
+            def fluxbox():
+                key='Control '
+                self.write_line= self.write_line+key
+           
+            def jwm():
+                key='mask="C" '
+                self.write_line= self.write_line+key
+           
+            options = {"icewm" : icewm, "fluxbox" : fluxbox, "jwm" : jwm}
+            options[DESKTOP]()
+            
+        def Alt():
+            def icewm():
+                key='Alt+'
+                self.write_line= self.write_line+key
+            
+            def fluxbox():
+                key='Mod1 '
+                self.write_line= self.write_line+key
+           
+            def jwm():
+                key='mask="A" '
+                self.write_line= self.write_line+key
+           
+            options = {"icewm" : icewm, "fluxbox" : fluxbox, "jwm" : jwm}
+            options[DESKTOP]()
+        
+        def Super():
+            def icewm():
+                key='Super+'
+                self.write_line= self.write_line+key
+            
+            def fluxbox():
+                key='Mod4 '
+                self.write_line= self.write_line+key
+           
+            def jwm():
+                key='mask="H" '
+                self.write_line= self.write_line+key
+           
+            options = {"icewm" : icewm, "fluxbox" : fluxbox, "jwm" : jwm}
+            options[DESKTOP]()
+            
+        def NoKey():
+            def icewm():
+                key=''
+                self.write_line= self.write_line+key
+            
+            def fluxbox():
+                key=''
+                self.write_line= self.write_line+key
+           
+            def jwm():
+                key=''
+                self.write_line= self.write_line+key
+           
+            options = {"icewm" : icewm, "fluxbox" : fluxbox, "jwm" : jwm}
+            options[DESKTOP]()
+            
+        options = {"Control" : Control, "Alt" : Alt, "Super" : Super, "None" : NoKey}
+        options[first_key]()
+        options[second_key]()
+        def check_key_combination():
+            for line in open(LOCATION, "r"):
+                if (self.key_combination) in line:
+                    sys.exit(Error((_("That key combination has been used"))))
+        
+        def icewm():
+            self.key_combination = self.write_line+third_key
+            check_key_combination()
+            self.write_line = 'key "'+self.write_line+third_key+'" '+command_to_add
+            text = open((LOCATION), "a")
+            text.write (self.write_line+"\n")
+            text.close()
+            
+        def fluxbox():
+            self.key_combination = self.write_line+third_key
+            check_key_combination()
+            self.write_line = self.write_line+third_key+' : ExecCommand '+command_to_add
+            text = open((LOCATION), "a")
+            text.write (self.write_line+"\n")
+            text.close()
+           
+        def jwm():
+            self.key_combination = self.write_line+third_key
+            check_key_combination()
+            self.write_line = '<Key '+self.write_line+'key="'+third_key+'">''exec:' +command_to_add+'</Key>'
+            for line in open(LOCATION, "r"):
+                if "<!-- Key bindings -->" in line:
+                    text = open((LOCATION+".new"), "a")
+                    text.write (line) 
+                    text.write (self.write_line+"\n")
+                    text.close()
+                else:
+                    text = open((LOCATION+".new"), "a")
+                    text.write (line) 
+                    text.close()
+            
+            #os_system_line="mv "+USER_HOME+"/"+DESKTOP+"/keys.new "+LOCATION
+            #os.system(os_system_line)
+           
+        options = {"icewm" : icewm, "fluxbox" : fluxbox, "jwm" : jwm}
+        options[DESKTOP]()
+                
+        Success(_("command has been added"))
+        
+        #refresh remove drop box
+        Remove.updateRemoveSelect()
+        
+    def scale_set_default_values(self, scale):
+        scale.set_update_policy(Gtk.UPDATE_CONTINUOUS)
+        scale.set_digits(0)
+        scale.set_value_pos(Gtk.POS_TOP)
+        scale.set_draw_value(True)
+        
+    def __init__(self):
+        self.frame = Gtk.Frame()
+        self.frame.set_label(_("Add Items"))
+        self.frame.set_border_width(10)
+        self.frame.show()
+        
+        vbox = Gtk.VBox()
+        self.frame.add(vbox)
+        vbox.show()
+        
+        self.KeyList = Gtk.ListStore(str)
+        self.KeyList.append(["None"])
+        self.KeyList.append(["Control"])
+        self.KeyList.append(["Alt"])
+        self.KeyList.append(["Super"])
+        
+        renderer_text = Gtk.CellRendererText()
+        
+        keyFrame = Gtk.Frame()
+        keyFrame.set_label(_("First Key:"))
+        vbox.pack_start(keyFrame, True, True, 0)
+        keyFrame.show()
+        
+        self.key1 = Gtk.ComboBox.new_with_model(self.KeyList)
+        self.key1.pack_start(renderer_text, True)
+        self.key1.add_attribute(renderer_text, "text", 0)
+        self.key1.set_active(0)
+        keyFrame.add(self.key1)
+        self.key1.show()
+        
+        keyFrame = Gtk.Frame()
+        keyFrame.set_label(_("Second Key:"))
+        vbox.pack_start(keyFrame, True, True, 0)
+        keyFrame.show()
+        
+        self.key2 = Gtk.ComboBox.new_with_model(self.KeyList)
+        self.key2.pack_start(renderer_text, True)
+        self.key2.add_attribute(renderer_text, "text", 0)
+        self.key2.set_active(0)
+        keyFrame.add(self.key2)
+        self.key2.show()
+        
+        keyFrame = Gtk.Frame()
+        keyFrame.set_label(_("Third Key:"))
+        vbox.pack_start(keyFrame, True, True, 0)
+        keyFrame.show()
+        
+        self.key3 = Gtk.Entry()
+        self.key3.set_text(_("third key (letter or number)"))
+        keyFrame.add(self.key3)
+        self.key3.show()
+        
+        self.command = Gtk.Entry()
+        self.command.set_text("command")
+        vbox.pack_start(self.command, True, True, 0)
+        self.command.show()
+        
+        self.label = Gtk.Label()
+        self.label.set_text(_("Add"))
+        self.label.show()
+        
+        #BUTTON BOX
+        
+        buttonbox = Gtk.HButtonBox()
+        vbox.pack_start(buttonbox, True, True, 0)
+        buttonbox.show()
+        
+        add = Gtk.Button.new_from_icon_name("gtk-add", Gtk.IconSize(1))
+        #add.set_label(_("Add"))
+        add.connect("clicked", self.apply)
+        buttonbox.pack_start(add, False, False, 0)
+        add.show()
+        
+        close = Gtk.Button.new_from_icon_name("gtk-close", Gtk.IconSize(1))
+        #close.set_label(_("Close"))
+        close.connect("clicked", lambda w: Gtk.main_quit())
+        buttonbox.add(close)
+        close.show()
+        
+
+class mainWindow(Gtk.Window):
+
+    def __init__(self):
+        Gtk.Window.__init__(self)
+        self.set_size_request(300,0)
+        self.set_border_width(10)
+        self.set_title(_("add-key"))
+        #pixbuf = get_icon("preferences-system", 48)
+        #self.set_icon(pixbuf)
+        
+        mainbox = Gtk.VBox()
+        self.add(mainbox)
+        mainbox.show()
+        
+        label = Gtk.Label()
+        label.set_text(_("Changing keys for: ")+DESKTOP+"\n")
+        mainbox.pack_start(label, False, False, 0)
+        label.show()
+        
+        self.notebook = Gtk.Notebook()
+        self.notebook.set_tab_pos(Gtk.PositionType(2))
+        self.notebook.set_size_request(300,200)
+        mainbox.pack_start(self.notebook, True, True, 0)
+        self.notebook.show()
+        
+        #Start Add Class
+        self.notebook.append_page(Add().frame, Add().label)
+        
+        #Start Remove Class
+        self.notebook.append_page(Remove().frame, Remove().label)
+
+if os.path.isfile(LOCATION) == (False):
+    sys.exit(Error(_("There is no file ~/.%s/keys \nThe session variable DESKTOP_CODE='%s' \nincorrectly matches your system" % ((DESKTOP), (DESKTOP)) )))
+win = mainWindow()
+win.connect("delete-event", Gtk.main_quit)
+import signal
+signal.signal(signal.SIGINT, signal.SIG_DFL) # without this, Ctrl+C from parent term is ineffectual
+win.show_all()
+Gtk.main()
+

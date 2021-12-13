@@ -1,0 +1,54 @@
+#!/bin/bash
+#add-desktop
+
+TEXTDOMAINDIR=/usr/share/locale
+TEXTDOMAIN=add-desktop
+
+function checkcancel {
+    CANOK="$?";
+    if [ "$CANOK" = "1" ]; then
+    exit;
+    fi
+}
+
+GetDesktopInformation() {
+app_info=$(yad --form --field=$"Item Name:" $"My App" --field=$"Item Icon:FL" "/usr/share/pixmaps" --field=$"Item Category:CB" $"Application|AudioVideo|Development|Education|Game|Graphics|Network|Office|Settings|System|Utility" --field=$"Item Command:" "my-app.sh" --field=$"Item Location:CB" $"1) Application Menu|2) Desktop Shortcut|3) Personal" --field=$"File Name:" "my-app" --field=$"Launch in Terminal:CHK" --title=$"add-desktop" --item-separator="|");
+checkcancel;
+}
+
+WriteFile() {
+    echo "[Desktop Entry]" > $1
+    echo "Encoding=UTF-8" >> $1
+    echo "Type=Application" >> $1
+    echo "Name=$(echo $app_info |cut -d '|' -f1)" >> $1
+    echo "Icon=$(echo $app_info |cut -d '|' -f2)" >> $1
+    echo "Categories=$CATEGORIES" >> $1
+    echo "Exec=$(echo $app_info |cut -d '|' -f4)" >> $1
+    TERMINAL=$(echo $app_info |cut -d '|' -f7);
+    TERMINAL=${TERMINAL,,};
+    echo "Terminal=$TERMINAL" >> $1
+}
+
+GetDesktopInformation 
+
+FILE_NAME="$(echo $app_info |cut -d '|' -f6).desktop"
+case $(echo $app_info |cut -d '|' -f5|cut -d ")" -f1) in
+"1") #Application Menu 
+    FILE_WRITE_LOCATION="$HOME/.local/share/applications/custom"
+    CATEGORIES="$(echo $app_info |cut -d '|' -f3);"
+    ;;
+"2") #Desktop Shortcut
+    FILE_WRITE_LOCATION="$HOME/Desktop"
+    CATEGORIES="$(echo $app_info |cut -d '|' -f3);"
+    ;;
+"3") #Task Centric Menu
+    FILE_WRITE_LOCATION="$HOME/.local/share/applications/TCM"
+    CATEGORIES="X-Personal;"
+    ;;
+esac
+FILE_WRITE="$FILE_WRITE_LOCATION/$FILE_NAME"
+
+if [ ! -d "$FILE_WRITE_LOCATION" ]; then
+    mkdir -p $FILE_WRITE_LOCATION 2>/dev/null
+fi
+WriteFile "$FILE_WRITE"

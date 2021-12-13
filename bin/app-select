@@ -1,0 +1,457 @@
+#!/usr/bin/env python3
+#Name: app-select
+#Version: 1.4
+#Depends: python, Gtk, python-xdg
+#Author: Dave (david@daveserver.info)
+#Purpose: List as many applications installed on the machine as possible 
+#         via gtk/xdg and select that application for use in other 
+#         applications or execute directly as an app launcher
+#License: gplv3
+#Todo: add an option to autoselect and return information if passed a desktop file like app-select --select --item="/path/to/file.desktop"
+
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk, Gdk, GObject, GLib, Gio, GdkPixbuf
+from xdg.DesktopEntry import DesktopEntry
+from xdg.BaseDirectory import xdg_config_home
+from xdg.BaseDirectory import xdg_data_home
+import xdg.IconTheme
+import os
+import re
+#import subprocess
+import getopt
+import sys
+import gettext
+gettext.install("app-select", "/usr/share/locale")
+ptranslate = gettext.translation('app-select-plugins', "/usr/share/locale", fallback=True)
+p_ = ptranslate.gettext
+
+apps = Gio.app_info_get_all()
+
+#SETTINGS:
+#Change below to your favourite terminal if not using antix desktop-defaults
+term_app = 'desktop-defaults-run -t '
+#Change below to use a different icon size
+icon_size = 48
+#Change below to set icon for when an icon is missing / cannot be found for the entry
+missing_icon = "application-x-executable"
+#Set the default state of the show all columns switch
+switchstate=False
+#Set location of the configuration file
+config = os.environ['HOME']+"/.config/app-select.conf"
+
+if not os.path.isfile(config):
+    os.system("cp %s %s" % ("/usr/share/app-select/app-select.conf", config))
+
+class Success:
+    def __init__(self, success):
+        dlg = Gtk.MessageDialog(parent=None, flags=0, message_type=Gtk.MessageType.INFO, buttons=Gtk.ButtonsType.OK, text="Success")
+        dlg.set_title(_("Successfully updated"))
+        dlg.format_secondary_text(success)
+        dlg.set_keep_above(True) # note: set_transient_for() is ineffective!
+        dlg.run()
+        dlg.destroy()
+        
+class Error:
+    def __init__(self, error):
+        dlg = Gtk.MessageDialog(parent=None, flags=0, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.OK, text="Error")
+        dlg.set_title(_("Failed to updated"))
+        dlg.format_secondary_text(error)
+        dlg.run()
+        dlg.destroy()
+
+class mainWindow(Gtk.Window):
+    def buildsearch(self):
+        self.searchentry.set_text("")
+        self.searchentry.set_placeholder_text(_("Type to filter..."))
+        self.searchentry.grab_focus()
+        
+    def clearsearch(self,widget):
+        self.buildsearch()
+        self.refresh_filter(self)
+        tree_selection = self.treeview.get_selection()
+        tree_selection.unselect_all()
+    
+    def refresh_filter(self,widget):
+        self.filtered_store.refilter()
+        search_query = self.searchentry.get_text()
+        self.treeview.set_cursor(0)
+        if search_query != "":
+            self.filter_message_box.show()
+        else:
+            self.filter_message_box.hide()
+
+    def visible_cb(self, model, iter, data=None):
+        search_query = self.searchentry.get_text().lower()
+        active_category = self.searchcombo.get_active()
+        search_in_all_columns = active_category == 0
+
+        if search_query == "": return True
+
+        if search_in_all_columns:
+            for col in range(1,self.treeview.get_n_columns()-1):
+                value = model.get_value(iter, col).lower()
+                if search_query in value:  return True
+            return False
+            
+        else: active_category = active_category +1
+
+        value = model.get_value(iter, active_category).lower()
+        return True if search_query in value else False
+    
+    def run_button(self, test):
+        self.run(self,"","","","")
+        
+    def on_click(self, widget, event):
+        if event.button == 3:
+            options_menu = Gtk.Menu()
+            options_menu.popup(None, None, None, None, event.button, event.time)
+            options_menu.show()
+            
+            menu_run = Gtk.MenuItem.new()
+            menu_run.set_label(_("Run Program"))
+            menu_run.connect("activate", self.run, "", "", "", "")
+            options_menu.append(menu_run)
+            menu_run.show()
+            
+            for line in open(config, "r"):
+                if line.strip() and "#" not in line:
+                    item=line.split("|")
+                    menu_item = Gtk.MenuItem.new()
+                    menu_item.set_label(p_(item[0]))
+                    menu_item.connect("activate", self.run, "", "", "custom", item[1])
+                    options_menu.append(menu_item)
+                    menu_item.show()
+            
+    def run(self, treeview, treecolumn, fill, selection, command):
+        if desktop:
+            self.hide()
+        tree_selection = self.treeview.get_selection()
+        (model, pathlist) = tree_selection.get_selected_rows()
+        for i, path in enumerate(pathlist) :
+            tree_iter = model.get_iter(path)
+            appname = model.get_value(tree_iter,2)
+            appexec = model.get_value(tree_iter,4)
+            appexec = re.sub(r'%.*', '', appexec)
+            appcategories = model.get_value(tree_iter,5)
+            filepath = model.get_value(tree_iter,6)
+            filename = os.path.basename(filepath)
+            appterm = model.get_value(tree_iter,7)
+            appicon = model.get_value(tree_iter,8)
+            
+            if selection == "custom":
+                exec_line = command
+                exec_line = "/usr/lib/app-select/plugins/"+exec_line
+                exec_line = exec_line.replace("%n", str(appname))
+                exec_line = exec_line.replace("%e", str(appexec))
+                exec_line = exec_line.replace("%c", str(appcategories))
+                exec_line = exec_line.replace("%f", str(filename))
+                exec_line = exec_line.replace("%p", str(filepath))
+                exec_line = exec_line.replace("%t", str(appterm))
+                exec_line = exec_line.replace("%i", str(appicon))
+                exec_line = exec_line.replace("\n", "")
+                if os.system(exec_line) != 0:
+                    Error(appname + _(": could not run custom command\n "+exec_line+"\nBased off function\n "+command+"\nRun app-select from terminal for more information\n"))
+                break
+            
+            if pselect:
+                print(str(filepath)+'|'+str(appname)+'|'+str(appexec)+'|'+str(appterm)+'|'+appcategories+'|'+str(appicon))
+                Gtk.main_quit()
+            else:
+                if appterm:
+                    os.system(term_app+" "+appexec+" > /dev/null 2>&1 &")
+                else:
+                    os.system(appexec+" > /dev/null 2>&1 &")
+    
+    def get_icon(self,appicon):
+        icon_theme = Gtk.IconTheme.get_default()
+        if os.path.isfile(appicon):
+            icon = appicon
+        else:
+            if icon_theme.lookup_icon(appicon, icon_size, 0):
+                icon_info = icon_theme.lookup_icon(appicon, icon_size, 0)
+                icon = icon_info.get_filename()
+            else:
+                if os.path.exists("/usr/share/pixmaps/%s" % appicon):
+                    icon = "/usr/share/pixmaps/"+appicon
+                else:
+                    icon = missing_icon
+                
+        icon = re.sub(r' ','\ ', icon)
+        try:
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file(icon)
+        except:
+            icon_info = icon_theme.lookup_icon(missing_icon, icon_size, 0)
+            icon = icon_info.get_filename()
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file(icon)
+
+        return pixbuf,icon
+
+    def add_item(self, print_info, store, filename, iftype):
+        appexec = DesktopEntry(filename).getExec()
+        appname = iftype+DesktopEntry(filename).getName()
+        appicon = DesktopEntry(filename).getIcon()
+        appdesc = DesktopEntry(filename).getComment()
+        appterm = DesktopEntry(filename).getTerminal()
+        appcategories = DesktopEntry(filename).getCategories()
+        appcategories = str(appcategories)
+        appcategories = appcategories.replace("'", "").replace("[", "").replace("]", "")
+        if not (appcategories):
+            appcategories = 'Accessories'
+        appcomb = appname + "\nDescription: " + appdesc + "\nExec: " + appexec + "\nCategories: " + appcategories + "\n"
+        
+        if appdesc == "": appdesc = "    ~~~~~~~~~~~~~~~    "
+        if appicon == "": appicon = missing_icon
+        
+        
+        if print_info:
+            iconinfo=self.get_icon(None,appicon)
+            print(str(filename)+'|'+str(appname)+'|'+str(appexec)+'|'+str(appterm)+'|'+appcategories+'|'+str(iconinfo[1])+'|'+str(appdesc))
+        else:
+            iconinfo=self.get_icon(appicon)
+            pixbuf=iconinfo[0]
+            icon=iconinfo[1]
+            appcomb = appname + "\nDescription: " + appdesc + "\nExec: " + appexec + "\nCategories: " + appcategories + "\n"
+            pixbuf = GdkPixbuf.Pixbuf.scale_simple(pixbuf, icon_size, icon_size,0)
+            store.append([pixbuf, appcomb, appname, appdesc, appexec, appcategories, filename, appterm, icon])
+            store.set_sort_column_id(1,0)
+    
+    def make_store(self):
+        self.store = None
+        self.store = Gtk.ListStore(GdkPixbuf.Pixbuf,str,str,str,str,str,str,bool,str)
+        
+        #Disabled for now:
+        #Can test / preview by uncommenting the below lines / for statements
+              
+        #for item in os.walk(xdg_config_home+"/autostart/"):
+        #    if item[2]:
+        #        filename = item[0]+"/"+"".join(item[2])
+        #        self.add_item(store, False, filename, 'Autostart: ')
+        
+        #for item in os.walk(xdg_data_home+"/applications/"):
+        #    if item[2]:
+        #        filename = item[0]+"/"+"".join(item[2])
+        #        self.add_item(store, False, filename, 'Personal: ')
+        
+        for name in apps:
+            filename = name.get_filename()
+            self.add_item(False, self.store, filename, '')
+        
+        store_filter = self.store.filter_new()
+        store_filter.set_visible_func(self.visible_cb)
+        
+        return store_filter
+        
+    def fill_treeview(self):
+        self.filtered_store = self.make_store()
+        self.treeview.set_model(self.filtered_store)
+        renderer = Gtk.CellRendererPixbuf()
+        column = Gtk.TreeViewColumn("", renderer, pixbuf=0)
+        self.treeview.append_column(column)
+        for i, column_title in enumerate([_("Info"), _("Name"), _("Description"), _("Exec"),_("Categories")]):
+            renderer = Gtk.CellRendererText()
+            column = Gtk.TreeViewColumn(column_title, renderer, text=i+1)
+            column.set_resizable(True)
+            if self.switch.get_active() == False and i == 0 : 
+                column.set_visible(True)
+                self.treeview.set_headers_visible(False)
+            elif self.switch.get_active() == True and i != 0 : 
+                column.set_visible(True)
+                column.set_fixed_width(300)
+                self.treeview.set_headers_visible(True)
+            else:
+                column.set_visible(False)
+            self.treeview.append_column(column)
+        
+    def refresh_treeview(self, widget, switchstate):
+        for i in self.treeview.get_columns():
+            self.treeview.remove_column(i)
+        self.fill_treeview()
+    
+    def toggle_window(self, fill):
+        if self.get_property("visible"):
+            self.hide()
+        else:
+            self.show()
+            self.buildsearch()
+    
+    def status_menu(self, icon, button, time):
+        menu = Gtk.Menu()
+        
+        reload = Gtk.MenuItem()
+        reload.set_label(_("Reload List"))
+        reload.connect("activate", self.refresh_treeview, None)
+        menu.append(reload)
+
+        quit = Gtk.MenuItem()
+        quit.set_label("Quit")
+        quit.connect("activate", lambda w: Gtk.main_quit())
+        menu.append(quit)
+
+        menu.show_all()
+
+        menu.popup(None, None, None, self.statusicon, button, time)
+
+    def __init__(self):
+        Gtk.Window.__init__(self)
+        self.set_size_request(640,480)
+        self.set_border_width(10)
+        self.set_title(_(" App Select "))
+        if desktop:
+            self.statusicon = Gtk.StatusIcon()
+            icon_info = self.get_icon("system-search")
+            self.statusicon.set_from_pixbuf(icon_info[0])
+            self.statusicon.connect("activate", self.toggle_window)
+            self.statusicon.connect("popup-menu", self.status_menu)
+            self.set_keep_above(True)
+            self.set_decorated(False)
+            self.maximize()
+            self.set_skip_pager_hint(True)
+            self.set_skip_taskbar_hint(True)
+            self.hide()
+        else:
+            self.show()
+        
+        grid = Gtk.Grid()
+        self.add(grid)
+        grid.show()
+        
+        label = Gtk.Label()
+        label.set_text(_("Search / Filter: "))
+        grid.attach(label, 1, 1, 1, 1)
+        label.show()
+        
+        self.searchentry = Gtk.Entry()
+        grid.attach(self.searchentry, 2, 1, 1, 1)
+        self.searchentry.set_hexpand(True)
+        self.searchentry.connect("changed", self.refresh_filter)
+        self.searchentry.connect("activate", self.run_button)
+        self.buildsearch()
+        self.searchentry.show()
+        
+        searchhbox = Gtk.HBox()
+        grid.attach(searchhbox, 3, 1, 1, 1)
+        searchhbox.show()
+        
+        categories = [_("All"),  _("Name Only"), _("Description Only"), _("Exec Only"),_("Categories Only")]
+        self.searchcombo = Gtk.ComboBoxText()
+        self.searchcombo.set_entry_text_column(0)
+        searchhbox.pack_start(self.searchcombo, 1,1,1)
+        for category in categories:
+            self.searchcombo.append_text(category)
+        self.searchcombo.set_active(0)
+        self.searchcombo.connect("changed", self.refresh_filter)
+        self.searchcombo.show()
+        
+        clearmessage = Gtk.Button.new_from_icon_name("gtk-clear", Gtk.IconSize(1))
+        #clearmessage.set_label(_("Clear"))
+        clearmessage.connect("clicked", self.clearsearch)
+        searchhbox.pack_start(clearmessage, 1,1,1)
+        clearmessage.show()
+
+        self.filter_message_box = Gtk.EventBox() 
+        grid.attach(self.filter_message_box, 1, 2, 3, 1)       
+        self.filter_message_box.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(1,0.5,0.5,0.5))
+        self.filter_message_box.hide()
+        
+        filter_message = Gtk.Label()
+        filter_message.set_text(_("\nDisplaying filtered results\n"))
+        filter_message.set_hexpand(True)
+        self.filter_message_box.add(filter_message)
+        filter_message.show()
+        
+        self.sw= Gtk.ScrolledWindow()
+        grid.attach(self.sw, 1, 3, 3, 1)
+        self.sw.set_hexpand(True)
+        self.sw.set_vexpand(True)
+        self.sw.show()
+        
+        switchbox = Gtk.HBox()
+        grid.attach(switchbox, 1, 4, 2, 1)
+        switchbox.show()
+        
+        label = Gtk.Label()
+        label.set_text(_("  Display Columns  "))
+        switchbox.pack_start(label, 0, 0, 0)
+        label.show() 
+        
+        self.switch = Gtk.Switch()
+        self.switch.set_size_request(75,30)
+        self.switch.connect("notify::active", self.refresh_treeview)
+        self.switch.set_state(switchstate)
+        switchbox.pack_start(self.switch, 0, 0, 0)
+        self.switch.show()
+        
+        self.treeview = Gtk.TreeView()
+        self.treeview.connect("row-activated", self.run, "", "")
+        self.treeview.connect("button-release-event", self.on_click)
+        self.treeview.set_enable_search(False)
+        self.fill_treeview()
+        self.sw.add(self.treeview)
+        self.treeview.show()
+
+        buttonbox = Gtk.HButtonBox()
+        grid.attach(buttonbox, 3, 4, 1, 1)
+        buttonbox.show()
+        
+        select = Gtk.Button.new_from_icon_name("gtk-select", Gtk.IconSize(1))
+        select.connect("clicked", self.run_button)
+        buttonbox.pack_start(select,0,0,0) 
+        select.set_can_default(True)
+        select.grab_default()
+
+        run = Gtk.Button.new_from_icon_name("gtk-execute", Gtk.IconSize(1))
+        run.connect("clicked", self.run_button)
+        buttonbox.pack_start(run,0,0,0) 
+        run.set_can_default(True)
+        run.grab_default()
+        
+        if pselect:
+            select.show()
+            run.hide()
+        else:
+            run.show()
+            select.hide()
+        
+        close = Gtk.Button.new_from_icon_name("gtk-close", Gtk.IconSize(1))
+        #close.set_label(_("Close"))
+        if desktop:
+            close.connect("clicked", self.toggle_window)
+        else:
+            close.connect("clicked", lambda w: Gtk.main_quit())
+        buttonbox.add(close)
+        close.show()
+        
+
+def print_usage(exit_code = 1):
+  print ("""Usage: %s [options]
+Options:        
+  --help (-h | -H)                       print this help and exit
+  --select (-s | -S)                           makes changes for program selection vs execution
+                                                 Output as:
+                                                 Desktop File | App Name | App Command | Is Terminal App | App Icon
+  --desktop (-d | -D)                          Run app-select as a desktop launcher
+  --info (-i | -I)                             Get the info on a specific .desktop file
+""" % sys.argv[0])
+  sys.exit(exit_code)
+
+try: opts, args = getopt.getopt(sys.argv[1:], "hsdi:HSDI:", 
+  ["help", "select", "desktop", "info="])
+except getopt.GetoptError: print_usage()
+
+pselect = False
+desktop = False
+for o, v in opts:
+    if o in ("-s", "-S", "--select"): pselect = True 
+    elif o in ("-h", "-H", "--help"): print_usage(0)
+    elif o in ("-d", "-D", "--desktop"): desktop = True
+    elif o in ("-i", "-I", "--info"): 
+        mainWindow.add_item(mainWindow, True, None, v, '')
+        sys.exit(1)
+
+
+win = mainWindow()
+win.connect("delete-event", Gtk.main_quit)
+import signal
+signal.signal(signal.SIGINT, signal.SIG_DFL) # without this, Ctrl+C from parent term is ineffectual
+Gtk.main()

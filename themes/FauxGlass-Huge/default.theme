@@ -1,0 +1,124 @@
+ThemeDescription="IceNine"
+ThemeAuthor="Albi"
+Look=flat
+Gradients="menubg.xpm menusel.xpm switchbg.xpm taskbarbg.xpm dialogbg.xpm taskbuttonbg.xpm taskbuttonactive.xpm taskbuttonminimized.xpm buttonA.xpm buttonI.xpm toolbuttonbg.xpm workspacebuttonbg.xpm workspacebuttonactive.xpm menubg.xpm taskbuttonactive.xpm menusel.xpm titleIB.xpm titleAB.xpm titleAS.xpm titleIS.xpm"
+RolloverButtonsSupported=1
+
+TitleButtonsRight="xmi"
+TitleButtonsSupported="xim"
+#TitleButtonsSupported="xism"
+TitleBarHeight=22
+
+TitleBarJustify=50
+
+BorderSizeX=2
+BorderSizeY=2
+CornerSizeX=20
+CornerSizeY=20
+DlgBorderSizeX=2
+DlgBorderSizeY=2
+
+ColorNormalButton="rgb:00/00/00"
+ColorNormalButtonText="rgb:ff/ff/ff"
+ColorActiveButton="rgb:00/00/00"
+ColorActiveButtonText="rgb:ff/ff/ff"
+
+ColorNormalTitleBarText="rgb:D9/D9/D9"
+ColorActiveTitleBarText="rgb:ff/ff/ff"
+ColorActiveTitleBarShadow="rgb:00/00/00"
+
+ColorActiveBorder="rgb:00/00/00"
+ColorNormalBorder="rgb:00/00/00"
+
+ColorDialog="rgb:00/00/00"
+ColorListBox="rgb:00/00/00"
+ColorListBoxText="rgb:ff/ff/ff"
+ColorListBoxSelection="rgb:00/7f/df"
+ColorListBoxSelectionText="rgb:ff/ff/ff"
+ColorScrollBar="rgb:00/00/00"
+ColorScrollBarSlider="rgb:00/00/00"
+ColorScrollBarButton="rgb:00/00/00"
+ColorScrollBarButtonArrow="rgb:00/00/00"
+ColorLabel="rgb:00/00/00"
+ColorLabelText="rgb:ff/ff/ff"
+
+ColorNormalMenu="rgb:2c/2c/2c"
+ColorActiveMenuItem="rgb:2c/2c/2c"
+ColorNormalMenuItemText="rgb:ff/ff/ff"
+ColorActiveMenuItemText="rgb:00/00/00"
+ColorDisabledMenuItemText="rgb:80/80/80"
+
+ColorDefaultTaskBar="rgb:56/52/52"
+ColorNormalTaskBarApp="rgb:56/52/52"
+ColorNormalTaskBarAppText="rgb:00/00/00"
+ColorInvisibleTaskBarApp="rgb:56/52/52"
+ColorInvisibleTaskBarAppText="rgb:56/52/52"
+ColorActiveTaskBarApp="rgb:56/52/52"
+ColorActiveTaskBarAppText="rgb:ff/ff/ff"	#testo programma attivo sulla taskbar
+ColorMinimizedTaskBarApp="rgb:56/52/52"
+ColorMinimizedTaskBarAppText="rgb:00/00/00"
+ColorNormalWorkspaceButton="rgb:56/52/52"
+ColorActiveWorkspaceButton="rgb:56/52/52"
+
+ColorInput="rgb:00/00/00"
+ColorInputText="rgb:ff/ff/ff"
+
+ColorClock=""
+ColorClockText="rgb:ff/ff/ff"
+
+ColorApm="#000000"			# Background colour of APM monitor, ""=force transparency
+ApmFontNameXft="sans:size=14"
+ColorApmText="#FFFFFF"
+
+ColorNetIdle="#000000"			# Background colour of the network monitor, 
+ColorNetReceive="#FFFF00"		# Incoming load on the network monitor
+ColorNetSend="#00FF00"			# Outgoing load on the network monitor
+
+ColorCPUStatusIdle="#000000"		# Background colour of the CPU monitor, ""=force transparency
+ColorCPUStatusUser="#FF0000"		# User load on the CPU monitor
+ColorCPUStatusSystem="#C000C0"		# System load on the CPU monitor
+ColorCPUStatusNice="#000000"		# Nice load on the CPU monitor
+
+ColorToolTip="rgb:ff/ff/ff"
+ColorToolTipText="rgb:00/00/ff"
+
+ColorMoveSizeStatus="rgb:ff/ff/ff"
+ColorMoveSizeStatusText="rgb:00/00/00"
+
+ColorQuickSwitch="rgb:56/52/52"
+ColorQuickSwitchText="rgb:00/00/00"
+
+# Font Specification
+TitleFontNameXft		=	sans:size=14:bold
+MenuFontNameXft			=	sans:size=14
+MinimizedWindowFontNameXft	=	sans:size=14:bold
+ActiveButtonFontNameXft		=	sans:size=14:bold
+NormalButtonFontNameXft		=	sans:size=14
+ToolButtonFontNameXft		=	sans:size=14
+NormalWorkspaceFontNameXft	=	sans:size=14
+ActiveWorkspaceFontNameXft	=	sans:size=14
+QuickSwitchFontNameXft		=	sans:size=14
+ListBoxFontNameXft		=	sans:size=14
+StatusFontNameXft		=	sans:size=14
+ToolTipFontNameXft		=	sans:size=14
+ActiveTaskBarFontNameXft	=	sans:size=14
+NormalTaskBarFontNameXft	=	sans:size=14
+ClockFontNameXft		=	sans:size=14
+InputFontNameXft		=	sans:size=14
+
+TaskBarClockLeds=1
+TimeFormat="%H"
+TaskBarDoubleHeight=1
+
+MenuIconSize=44		        # Menu. 
+SmallIconSize=44 			# Taskbar & Titlebar. Taskbar height = height of linux.xpm. Titlebar height = TitleBarHeight in *.theme
+LargeIconSize=64			# Quickswitch window
+HugeIconSize=96				# ?  Cannot identify what it applies to
+ShowMenuButtonIcon=0			# Show application icon on menuButton
+
+# --------------------
+# Desktop
+# --------------------
+DesktopBackgroundImage=""		# Prevent IceWM showing a background image
+DesktopBackgroundColor=""		# Prevent IceWM showing a background colour
+#DesktopBackgroundCenter=1		# 0=tile 1=fill screen with single image

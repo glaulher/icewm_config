@@ -1,0 +1,113 @@
+#!/bin/sh
+
+
+PROGNAME=${0##*/}
+PROGVERSION="7.0"
+
+
+
+# --------------------
+# Help and Information
+# --------------------
+
+# When requested show information about script
+if [ "$1" = '-h' ] || [ "$1" = '--help' ]; then
+cat << end-of-messageblock
+
+$PROGNAME version $PROGVERSION
+A launch script for $PROGNAME.sh
+
+Usage: 
+   $PROGNAME [options]
+
+Options:
+   -h, --help     Show this output
+
+Summary:
+   Runs $PROGNAME.sh in either a console or GUI terminal according to the
+   environment in which it is started.
+
+   When $PROGNAME is run without a command line parameter, $PROGNAME.sh 
+   will use its default configuration file.  If a file name is specified as
+   the first parameter, it will be passed to and used by $PROGNAME.sh as
+   an alternative configuration file.
+
+   Optionally, the choice of terminal emulator and its parameters can be set in
+   /home/USERNAME/.config/connectshares/launcher.conf
+
+Requires:
+   awk, $PROGNAME.sh, cut, dialog, grep, sudo, x-terminal-emulator
+
+end-of-messageblock
+   exit 0
+fi
+
+
+# -------------
+# Set Variables
+# -------------
+
+# The path to the file containing user specified configuration for the launcher
+CONFFILE="$HOME/.config/connectshares/launcher.conf"
+
+# Check the conf file is present and obtain the values from it
+if [ -f "$CONFFILE" ]; then
+
+   # Enable/disable the use of preferred settings for the launcher
+   USEPREFS=$(grep "USEPREFS" "$CONFFILE" | grep -v "#" | cut -d "=" -f 2)
+
+   # The name of the preferred terminal emulator
+   PREFTERM=$(grep "PREFTERM" "$CONFFILE" | grep -v "#" | cut -d "=" -f 2)
+
+   # The parameters to apply when starting the preferred terminal
+   CONSHRPARAMS=$(grep "CONSHRPARAMS" "$CONFFILE" | grep -v "#" | cut -d "=" -f 2-)
+fi
+
+# The title displayed in the titlebar of the terminal window
+TITLE="Connectshares"
+
+
+# ------
+# Launch
+# ------
+
+# Launch when in console mode
+# Verify not in GUI
+if [ "$DISPLAY" = "" ]; then
+
+   # Launch
+   sudo $PROGNAME.sh $1
+
+   # Exit the script as no further action is needed
+   exit
+fi
+   
+
+# Launch when in GUI mode
+# Check whether the preferred terminal emulator exists in the path
+VALIDTERM=$(which $PREFTERM | awk -F "/" '{ print $NF }')
+
+# Check whether preferences are to be used and values have been obtained for them
+if [ "$USEPREFS" = "y" ] && [ "$VALIDTERM" != "" ] && [ "$CONSHRPARAMS" != "" ]; then
+
+   # Cater for differences in the way the command to run in the terminal command is handled 
+   [ "$PREFTERM" = "xfce4-terminal" ] && EXE="-x" || EXE="-e"
+
+   # Launch using the values obtained
+   $PREFTERM $CONSHRPARAMS -T "$TITLE" $EXE sudo $PROGNAME.sh $1
+
+   else
+
+   # Display an advice message and launch using the system default terminal emulator
+   MESSAGE="\nThe look of the $PROGNAME windows is not optimised \n\nIt can be changed in \n$CONFFILE"
+   x-terminal-emulator -T "$TITLE" -e dialog --title "Advice"      \
+                                             --no-shadow           \
+                                             --sleep 3             \
+                                             --cr-wrap             \
+                                             --infobox "$MESSAGE"  \
+                                             17 60
+   x-terminal-emulator -T "$TITLE" -e sudo $PROGNAME.sh $1
+fi
+
+exit
+ 

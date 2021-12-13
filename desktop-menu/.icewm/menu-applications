@@ -1,0 +1,150 @@
+
+menu "antiX" /usr/share/icons/papirus-antix/48x48/categories/distributor-logo-antix.png { 
+prog "Android Device USB Connect" /usr/share/icons/papirus-antix/48x48/devices/smartphone.png /usr/local/bin/android-device-usb-connect.sh
+prog "antiX autoremove" /usr/share/icons/papirus-antix/48x48/categories/debian-logo.png /usr/local/bin/yad-autoremove
+prog "antiX Updater" /usr/share/icons/papirus-antix/48x48/categories/software-sources.png /usr/local/bin/yad-updater
+prog "antiX User Manager" /usr/share/icons/papirus-antix/48x48/categories/user-manager.png su-to-root -X -c antix-user
+prog "Backlight Brightness" /usr/share/icons/papirus-antix/48x48/categories/backlight-brightness.png x-terminal-emulator -e backlight-brightness --pause
+prog "Change WiFi program" /usr/share/icons/papirus-antix/48x48/categories/connman.png /usr/local/bin/antix-wifi-switch
+prog "Chroot Rescue Scan" /usr/share/icons/papirus-antix/48x48/categories/rescuetime.png x-terminal-emulator -e sudo chroot-rescue-scan --pause
+prog "CLI APT-based Package Manager" /usr/share/icons/papirus-antix/48x48/categories/system-software-install.png x-terminal-emulator -e sudo /usr/local/bin/cli-aptiX --pause
+prog "Command Line Control Centre" /usr/share/icons/papirus-antix/48x48/categories/command-line-control-centre.png x-terminal-emulator -e antiX-cli-cc
+prog "Configure Persistence" /usr/share/icons/papirus-antix/48x48/categories/persist-config.png su-to-root -X -c persist-config
+prog "Date and Time" /usr/share/icons/papirus-antix/48x48/categories/time.png /usr/local/bin/set_time-and_date.sh
+prog "Format USB" /usr/share/pixmaps/formatusb.png su-to-root -X -c "formatusb"
+prog "IceWM Toolbar Icon Manager" /usr/share/icons/papirus-antix/48x48/categories/icewm_editor.png /usr/local/bin/icewm-toolbar-icon-manager.sh
+prog "ISO Snapshot" /usr/share/icons/papirus-antix/48x48/categories/iso-snapshot.png su-to-root -X -c iso-snapshot
+prog "Live-USB Kernel Updater" /usr/share/icons/papirus-antix/48x48/categories/live-usb-kernel-updater.png x-terminal-emulator -e sudo /usr/local/bin/live-kernel-updater --pause
+prog "Live USB Maker" /usr/share/icons/papirus-antix/48x48/categories/live-usb-maker.png su-to-root -X -c live-usb-maker-gui-antix
+prog "Login Manager" /usr/share/icons/papirus-antix/48x48/devices/computer.png su-to-root -X -c /usr/local/bin/login-config-antix
+prog "Personal Menu Editor" /usr/share/icons/papirus-antix/48x48/categories/icewm_peditor.png /usr/local/bin/fast_personal_menu_editor.sh
+prog "Remaster" /usr/share/icons/papirus-antix/48x48/categories/remastersys.png su-to-root -X -c live-remaster
+prog "Save Persistence Changes" /usr/share/icons/papirus-antix/48x48/categories/palimpsest.png su-to-root -X -c persist-save
+prog "Set up Persistence" /usr/share/icons/papirus-antix/48x48/categories/persist-makefs.png su-to-root -X -c persist-makefs
+prog "User Language" /usr/share/icons/papirus-antix/48x48/categories/preferences-desktop-locale.png locale-antix
+prog "yad-color" /usr/share/icons/papirus-antix/48x48/categories/gcolor2.png yad-color
+}
+separator
+menu "Accessories" /usr/share/icons/papirus-antix/48x48/categories/applications-accessories.png { 
+prog "Archive Manager" /usr/share/icons/org.gnome.ArchiveManager.png file-roller 
+prog "Calcurse" /usr/share/icons/papirus-antix/48x48/categories/evolution-calendar.png desktop-defaults-run -t calcurse
+prog "CherryTree" /usr/share/icons/papirus-antix/48x48/categories/cherrytree.png cherrytree 
+prog "ClipIt" /usr/share/icons/papirus-antix/48x48/categories/clipit-trayicon.png clipit
+prog "Firejail Configuration Wizard" /usr/share/icons/papirus-antix/48x48/categories/firejail-ui.png firejail-ui
+prog "Galculator" /usr/share/icons/papirus-antix/48x48/categories/galculator.png galculator
+prog "Leafpad" /usr/share/icons/papirus-antix/48x48/categories/leafpad.png leafpad 
+prog "Midnight Commander Editor" /usr/share/icons/papirus-antix/48x48/categories/MidnightCommander.png x-terminal-emulator -e mcedit
+prog "Other Desktops" /usr/share/icons/papirus-antix/48x48/places/user-desktop.png /usr/local/lib/desktop-session/desktop-session-menu-window ignore-settings
+prog "Rxvt Color Unicode Terminal" /usr/share/icons/papirus-antix/48x48/categories/terminal.png urxvt
+prog "Searchmonkey" /usr/share/icons/papirus-antix/48x48/categories/searchmonkey.png searchmonkey
+prog "Xfburn" /usr/share/icons/papirus-antix/48x48/devices/media-cdrom.png xfburn
+prog "zzzFM File Search" /usr/share/pixmaps/zzzfm-find.png zzzfm --find-files 
+}
+menu "Games" /usr/share/icons/papirus-antix/48x48/categories/applications-games.png { 
+prog "DOSBox Emulator" /usr/share/icons/papirus-antix/48x48/categories/dosbox.png dosbox
+prog "Mahjongg" /usr/share/icons/papirus-antix/48x48/categories/org.gnome.Mahjongg.png gnome-mahjongg
+}
+menu "Graphics" /usr/share/icons/papirus-antix/48x48/categories/applications-graphics.png { 
+prog "Document Scanner" /usr/share/icons/papirus-antix/48x48/devices/scanner.png simple-scan
+prog "Gtkam Digital Camera Browser" /usr/share/icons/papirus-antix/48x48/categories/gtkam-camera.png gtkam
+prog "LibreOffice Draw" /usr/share/icons/papirus-antix/48x48/categories/libreoffice-draw.png libreoffice --draw 
+prog "Mirage" /usr/share/icons/papirus-antix/48x48/categories/mirage.png mirage 
+prog "mtPaint Graphic Editor" /usr/share/icons/papirus-antix/48x48/categories/mtpaint.png mtpaint 
+prog "Screenshot" /usr/share/icons/papirus-antix/48x48/categories/gnome-screenshot.png antixscreenshot.sh
+}
+menu "Internet" /usr/share/icons/papirus-antix/48x48/categories/preferences-system-network.png { 
+prog "Ceni" /usr/share/icons/papirus-antix/48x48/categories/ceni.png desktop-defaults-run -t su-to-root -c /usr/sbin/Ceni
+prog "Claws Mail" /usr/share/icons/papirus-antix/48x48/categories/claws-mail.png claws-mail 
+prog "Connectshares" /usr/share/icons/papirus-antix/48x48/categories/connectshares.png connectshares
+prog "Connectshares Configuration" /usr/share/icons/papirus-antix/48x48/categories/connectshares-config.png connectshares-config
+prog "Connman UI Setup" /usr/share/icons/papirus-antix/48x48/categories/preferences-system-network.png cmst
+prog "Dillo" /usr/share/icons/papirus-antix/48x48/categories/dillo.png dillo 
+prog "Disconnectshares" /usr/share/icons/papirus-antix/48x48/categories/disconnectshares.png disconnectshares
+prog "Droopy" /usr/share/icons/papirus-antix/48x48/categories/droopy.png droopy.sh
+prog "Firefox ESR" /usr/share/icons/papirus-antix/48x48/categories/firefox-esr.png /usr/lib/firefox-esr/firefox-esr 
+prog "gFTP" /usr/share/icons/papirus-antix/48x48/categories/gftp.png gftp-gtk 
+prog "GNOME PPP" /usr/share/icons/papirus-antix/48x48/categories/gnome-ppp.png gnome-ppp
+prog "HexChat" /usr/share/icons/papirus-antix/48x48/categories/hexchat.png hexchat --existing 
+prog "Links 2" /usr/share/icons/papirus-antix/48x48/categories/links2.png xlinks2
+prog "Search Bar" /usr/share/icons/papirus-antix/48x48/categories/eye-icon.png search-bar
+prog "Transmission" /usr/share/icons/papirus-antix/48x48/categories/transmission.png transmission-gtk 
+prog "WPA Gui" /usr/share/icons/papirus-antix/48x48/categories/wpa_gui.png /usr/sbin/wpa_gui
+}
+menu "Multimedia" /usr/share/icons/papirus-antix/48x48/categories/applications-multimedia.png { 
+prog "Alsamixer" /usr/share/icons/papirus-antix/48x48/categories/alsamixer-equalizer.png x-terminal-emulator -e alsamixer
+prog "Alsamixer Equalizer" /usr/share/icons/papirus-antix/48x48/categories/alsamixer-equalizer.png x-terminal-emulator -e alsamixer -D equalizer
+prog "Asunder CD Ripper" /usr/share/icons/papirus-antix/48x48/categories/asunder.png asunder 
+prog "Celluloid" /usr/share/icons/papirus-antix/48x48/categories/io.github.celluloid_player.Celluloid.png celluloid 
+prog "GUVCView" /usr/share/icons/papirus-antix/48x48/categories/guvcview.png guvcview
+prog "MPV Media Player" /usr/share/icons/papirus-antix/48x48/categories/mpv.png mpv --player-operation-mode=pseudo-gui -- 
+prog "Poor Man's Radio Player" /usr/share/icons/papirus-antix/48x48/categories/library-internet-radio.png x-terminal-emulator -e pmrp
+prog "SMTube" /usr/share/icons/papirus-antix/48x48/categories/smtube.png smtube
+prog "Sound Card Chooser" /usr/share/icons/papirus-antix/48x48/categories/soundcard.png alsa-set-default-card
+prog "Streamlight" /usr/share/pixmaps/streamlight-gui-launcher.png streamlight-gui-launcher.sh
+prog "Streamtuner2" /usr/share/icons/papirus-antix/48x48/categories/streamtuner2.png streamtuner2
+prog "WinFF" /usr/share/icons/papirus-antix/48x48/categories/winff.png winff 
+prog "XMMS" /usr/share/icons/papirus-antix/48x48/categories/xmms.png xmms
+prog "Youtube video player" /usr/share/icons/papirus-antix/48x48/categories/youtube.png x-terminal-emulator -e /usr/local/bin/ytfzf
+}
+menu "Office" /usr/share/icons/papirus-antix/48x48/categories/applications-office.png { 
+prog "LibreOffice" /usr/share/icons/papirus-antix/48x48/categories/libreoffice-startcenter.png libreoffice 
+prog "LibreOffice Calc" /usr/share/icons/papirus-antix/48x48/categories/libreoffice-calc.png libreoffice --calc 
+prog "LibreOffice Draw" /usr/share/icons/papirus-antix/48x48/categories/libreoffice-draw.png libreoffice --draw 
+prog "LibreOffice Impress" /usr/share/icons/papirus-antix/48x48/categories/libreoffice-impress.png libreoffice --impress 
+prog "LibreOffice Math" /usr/share/icons/papirus-antix/48x48/categories/libreoffice-math.png libreoffice --math 
+prog "LibreOffice Writer" /usr/share/icons/papirus-antix/48x48/categories/libreoffice-writer.png libreoffice --writer 
+prog "qpdfview" /usr/share/icons/papirus-antix/48x48/categories/qpdfview.png qpdfview --unique 
+}
+menu "Preferences" /usr/share/icons/papirus-antix/48x48/categories/preferences-desktop.png { 
+prog "Adblock" /usr/share/icons/papirus-antix/48x48/categories/advert-block.png su-to-root -X -c block-advert.sh
+prog "Add Key" /usr/share/icons/papirus-antix/48x48/categories/preferences-desktop-keyboard-shortcuts.png add-key
+prog "Add Menu Item" /usr/share/icons/papirus-antix/48x48/categories/add-menu-item.png add-desktop
+prog "ADSL/PPPOE Configuration" /usr/share/icons/papirus-antix/48x48/categories/pppoeconf.png x-terminal-emulator -e /usr/sbin/pppoeconf
+prog "Alternatives Configurator" /usr/share/icons/papirus-antix/48x48/categories/galternatives.png gksu /usr/bin/galternatives
+prog "ARandR" /usr/share/icons/papirus-antix/48x48/devices/display.png arandr
+prog "Bluetooth Manager" /usr/share/icons/papirus-antix/48x48/categories/blueman.png blueman-manager
+prog "Configure Automount" /usr/share/icons/papirus-antix/48x48/categories/mountbox.png automount-config
+prog "Connman UI Setup" /usr/share/icons/papirus-antix/48x48/categories/preferences-system-network.png cmst
+prog "Customize Look and Feel" /usr/share/icons/papirus-antix/48x48/categories/preferences-desktop-theme.png lxappearance
+prog "Desktop Preferences" /usr/share/icons/papirus-antix/48x48/places/user-desktop.png pcmanfm --desktop-pref
+prog "Menu Manager" /usr/share/icons/papirus-antix/48x48/categories/menu-editor.png sudo menu_manager.sh
+prog "Mouse Configuration" /usr/share/icons/papirus-antix/48x48/devices/input-mouse.png ds-mouse
+prog "Print Settings" /usr/share/icons/papirus-antix/48x48/devices/printer.png system-config-printer
+prog "Qt5 Settings" /usr/share/icons/papirus-antix/48x48/categories/qtcreator.png qt5ct
+prog "Remove Menu Item" /usr/share/icons/papirus-antix/48x48/categories/remove-menu-item.png remove-desktop
+prog "Screenlight" /usr/share/icons/papirus-antix/48x48/categories/screenlight.png screenlight-menu.sh
+prog "Set Font Size DPI" /usr/share/icons/papirus-antix/48x48/categories/fonts.png gksu set-dpi
+prog "Synaptic Package Manager" /usr/share/icons/papirus-antix/48x48/categories/synaptic.png su-to-root -X -c /usr/sbin/synaptic
+prog "System Keyboard" /usr/share/icons/system-keyboard-qt.png su-to-root -X -c system-keyboard-qt
+prog "User Language" /usr/share/icons/papirus-antix/48x48/categories/preferences-desktop-locale.png locale-antix
+prog "Wallpaper" /usr/share/icons/papirus-antix/48x48/categories/preferences-desktop-wallpaper.png /usr/local/bin/wallpaper
+}
+menu "Programming" /usr/share/icons/papirus-antix/48x48/categories/applications-development.png { 
+prog "Geany" /usr/share/icons/papirus-antix/48x48/categories/geany.png geany 
+prog "Vim.tiny" /usr/share/icons/papirus-antix/48x48/categories/vim.png desktop-defaults-run -t vim 
+}
+menu "System" /usr/share/icons/papirus-antix/48x48/categories/preferences-system.png { 
+prog "App Select" /usr/share/icons/papirus-antix/48x48/categories/gnome-searchtool.png /usr/local/bin/app-select
+prog "Boot Repair" /usr/share/icons/papirus-antix/48x48/categories/bootrepair.png su-to-root -X -c bootrepair
+prog "Control Centre" /usr/share/icons/papirus-antix/48x48/categories/control-centre.png antixcc.sh
+prog "File Manager PCManFM" /usr/share/icons/papirus-antix/48x48/categories/system-file-manager.png pcmanfm 
+prog "Firetools" /usr/share/icons/papirus-antix/48x48/categories/firetools.png firetools
+prog "GParted" /usr/share/icons/papirus-antix/48x48/categories/gparted.png gksu gparted
+prog "Grsync" /usr/share/icons/papirus-antix/48x48/categories/grsync.png /usr/bin/grsync -i 
+prog "Htop" /usr/share/icons/papirus-antix/48x48/categories/htop.png urxvt -e htop
+prog "luckyBackup" /usr/share/icons/papirus-antix/48x48/categories/luckybackup.png /usr/bin/luckybackup
+prog "luckyBackup as Super User" /usr/share/icons/papirus-antix/48x48/categories/luckybackup.png su-to-root -X -c /usr/bin/luckybackup
+prog "Midnight Commander" /usr/share/icons/papirus-antix/48x48/categories/MidnightCommander.png x-terminal-emulator -e mc
+prog "Mountbox" /usr/share/icons/papirus-antix/48x48/categories/mountbox.png mountbox
+prog "Network Assistant" /usr/share/icons/papirus-antix/48x48/categories/network-assistant.png su-to-root -X -c network-assistant
+prog "Package Installer" /usr/share/icons/papirus-antix/48x48/categories/packageinstaller.png su-to-root -X -c packageinstaller
+prog "PC Information" /usr/share/icons/papirus-antix/48x48/categories/info_blue.png inxi-gui
+prog "Repo Manager" /usr/share/icons/papirus-antix/48x48/categories/repo-manager.png su-to-root -X -c repo-manager
+prog "Root Terminal" /usr/share/icons/papirus-antix/48x48/categories/gksu-root-terminal.png gksu /usr/bin/x-terminal-emulator
+prog "ROX Filer" /usr/share/icons/papirus-antix/48x48/categories/rox-filer.png /usr/bin/rox-filer
+prog "ROX Filer as root" /usr/share/icons/papirus-antix/48x48/categories/rox-filer-root.png sudo rox-filer
+prog "ROXTerm" /usr/share/icons/papirus-antix/48x48/categories/roxterm.png roxterm
+prog "Task Manager" /usr/share/icons/papirus-antix/48x48/categories/utilities-system-monitor.png lxtask
+prog "zzzFM" /usr/share/pixmaps/zzzfm.png zzzfm 
+}
+

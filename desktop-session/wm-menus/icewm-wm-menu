@@ -1,0 +1,13 @@
+prog "Rox-Fluxbox" - /usr/local/lib/desktop-session/desktop-session-restart Rox-Fluxbox
+prog "zzz-Fluxbox" - /usr/local/lib/desktop-session/desktop-session-restart zzz-Fluxbox
+prog "Minimal-Fluxbox" - /usr/local/lib/desktop-session/desktop-session-restart Minimal-Fluxbox
+prog "Fluxbox" - /usr/local/lib/desktop-session/desktop-session-restart Fluxbox
+prog "Rox-IceWM" - /usr/local/lib/desktop-session/desktop-session-restart Rox-IceWM
+prog "zzz-IceWM" - /usr/local/lib/desktop-session/desktop-session-restart zzz-IceWM
+prog "Minimal-IceWM" - /usr/local/lib/desktop-session/desktop-session-restart Minimal-IceWM
+prog "IceWM" - /usr/local/lib/desktop-session/desktop-session-restart IceWM
+prog "Rox-JWM" - /usr/local/lib/desktop-session/desktop-session-restart Rox-JWM
+prog "zzz-JWM" - /usr/local/lib/desktop-session/desktop-session-restart zzz-JWM
+prog "Minimal-JWM" - /usr/local/lib/desktop-session/desktop-session-restart Minimal-JWM
+prog "JWM" - /usr/local/lib/desktop-session/desktop-session-restart JWM
+prog "herbstluftwm" - /usr/local/lib/desktop-session/desktop-session-restart herbstluftwm

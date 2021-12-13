@@ -1,0 +1,193 @@
+#!/usr/bin/env python3
+#Name: set-screen-blank
+#Version: 2.1
+#Depends: python, Gtk, xset
+#Author: Dave (david@daveserver.info)
+#Purpose: Configure screen blank time on a per user basis for a session. 
+#License: gplv2
+
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk, Gdk, GLib
+import os 
+import re
+import gettext
+gettext.install("set-screen-blank", "/usr/share/locale")
+class Error:
+    def __init__(self, parent, error):
+        dlg = Gtk.MessageDialog(parent=parent, flags=0, message_type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.OK, text="Error")
+        dlg.format_secondary_text(error)
+        dlg.run()
+        dlg.destroy()
+       
+class Success:
+    def __init__(self, parent, success):
+         dlg = Gtk.MessageDialog(parent=parent, flags=0, message_type=Gtk.MessageType.INFO, buttons=Gtk.ButtonsType.OK, text="Success")
+         dlg.format_secondary_text(success)
+         dlg.run()
+         dlg.destroy()
+
+class Var: 
+    def read(self):        
+        var = Var
+        var.USER_HOME = os.environ['HOME']
+        var.CONF_USER_DIR = var.USER_HOME+"/.desktop-session/"
+        var.CONF_USER_FILE = var.CONF_USER_DIR+"desktop-session.conf"
+        var.CONF_SYSTEM_FILE = "/etc/desktop-session/desktop-session.conf"
+        
+        if not os.path.exists(var.CONF_USER_DIR):
+            os.system("mkdir %s" % (var.CONF_USER_DIR))
+            os.system("cp %s %s" % ((var.CONF_SYSTEM_FILE),(var.CONF_USER_DIR)))
+        else:
+            if not os.path.isfile(var.CONF_USER_FILE):
+                os.system("cp %s %s" % ((var.CONF_SYSTEM_FILE),(var.CONF_USER_DIR)))
+            
+        for line in open(var.CONF_USER_FILE, "r"):
+            if "#" not in line:
+                if re.search(r'^SCREEN_BLANK_TIME=', line):
+                    pieces = line.split('=')
+                    OBJECT=(pieces[1])
+                    OBJECT = re.sub(r'\n', '', OBJECT)
+                    OBJECT = re.sub(r'"', '', OBJECT)
+                    OBJECT = (int(OBJECT)/60)
+                    var.blank_time = OBJECT
+        
+    def write(self, item):
+        WRITE_FILE = Var.CONF_USER_FILE+".tmp"
+        READ_FILE = Var.CONF_USER_FILE
+        
+        text = open((WRITE_FILE), "w");text.write("");text.close()
+        text = open((WRITE_FILE), "a")
+        for line in open(READ_FILE, "r"):
+            if "#" not in line:
+                if re.search(r'^SCREEN_BLANK_TIME=', line):
+                    text.write ("SCREEN_BLANK_TIME=\""+str(item)+"\"\n") 
+                else:
+                    text.write (line) 
+            else:
+                text.write (line) 
+        text.close()        
+        os.system("mv %s %s" % ((WRITE_FILE), (READ_FILE)))
+
+class mainWindow(Gtk.Window):
+
+    def apply(self,widget,option):
+        if option == 0: #apply button
+            blank_time_value = int(self.blank_time.get_value())
+            blank_time_value = (blank_time_value * 60)
+            Var().write(blank_time_value)
+            try:
+                os.system("xset dpms "+str(blank_time_value)+" "+str(blank_time_value)+" "+str(blank_time_value)+" s "+str(blank_time_value)+" "+str(blank_time_value)+" ")
+            except:
+                Error(self, _("Could not run set-screen-blank -set"))
+            else:
+                Success(self, _("Screen blank time has been set to: \n"+str(blank_time_value/60)+" minutes or "+str(blank_time_value)+" seconds" ))
+    
+    def toggle_sensitive(self, option):
+        if option == 0 :
+            self.aply.set_sensitive(False)
+            self.blank_time.set_sensitive(False)
+            self.sliderbox_label.set_sensitive(False)
+        else:
+            self.aply.set_sensitive(True)
+            self.blank_time.set_sensitive(True)
+            self.sliderbox_label.set_sensitive(True)
+
+    def toggle_blank(self, widget, object):
+        if self.loopkill:
+            self.loopkill=False
+            return
+            
+        if self.switch.get_active() == True:
+            current_time = str(Var.blank_time)
+            self.toggle_sensitive(1)
+            try:
+                os.system("xset +dpms; xset s on; xset s expose;")
+            except:
+                Error(self, _("Could not turn on screen blank"))
+                self.switch.set_active(False)
+                self.loopkill=True
+        else:
+            self.toggle_sensitive(0)
+            Var().write(0)
+            try:
+                os.system("xset dpms 0 0 0 s 0 0; xset -dpms; xset s off; xset s noexpose ")
+            except:
+                Error(self, _("Could not run turn off screen blank via xset 0 0 0 s 0 0, xset -dpms, xset s off, xset s noexpose"))
+                self.switch.set_active(True)
+                self.loopkill=True
+            else:
+                Success(self, _("Screen blanking has been turned off" ))
+
+    def __init__(self):
+        Gtk.Window.__init__(self)
+        self.set_size_request(300,0)
+        self.set_border_width(10)
+        
+        mainframe = Gtk.Frame()
+        mainframe.set_label(_("Screen Blank Time"))
+        self.add(mainframe)
+        self.grid = Gtk.Grid()
+        mainframe.add(self.grid)
+        
+        infobox = Gtk.HBox()
+        infobox.set_border_width(10)
+        self.grid.attach(infobox, 1, 1, 1, 1)
+        
+        self.infobox_label = Gtk.Label()
+        self.infobox_label.set_text(_("  Turn on/off screen blank timeout  "))
+        infobox.pack_start(self.infobox_label, True,True,0)
+        
+        sliderbox = Gtk.VBox()
+        sliderbox.set_border_width(10)
+        self.grid.attach(sliderbox, 1, 2, 2, 1)
+        
+        self.sliderbox_label = Gtk.Label()
+        self.sliderbox_label.set_text(_("  Time before screen blanks (Minutes)  "))
+        sliderbox.pack_start(self.sliderbox_label, True,True,0)
+        
+        adj1 = Gtk.Adjustment(value=float(Var.blank_time), lower=0, upper=120, step_increment=1, page_increment=5, page_size=1)
+        self.blank_time = Gtk.HScale()
+        self.blank_time.set_adjustment(adj1)
+        #self.blank_time.set_size_request(200, 45)
+        self.blank_time.set_digits(0)
+        self.blank_time.set_draw_value(True)
+        sliderbox.pack_start(self.blank_time, True, True, 0)
+
+        bbox = Gtk.HBox()
+        self.grid.attach(bbox, 2, 1, 1, 1)
+        bbox.show()
+
+        self.switch = Gtk.Switch()
+        self.switch.connect("notify::active", self.toggle_blank)
+        self.switch.set_size_request(75,30)
+        bbox.pack_end(self.switch, False, False, 10)
+        
+        #BUTTON BOX
+        buttonbox = Gtk.HButtonBox()
+        buttonbox.set_border_width(10)
+        self.grid.attach(buttonbox, 2, 3, 1,1)
+        
+        self.aply = Gtk.Button.new_from_icon_name("gtk-apply", Gtk.IconSize(1))
+        #self.aply.set_label(_("Apply"))
+        self.aply.connect("clicked", self.apply, 0)
+        buttonbox.pack_start(self.aply, True, True, 0)
+        
+        close = Gtk.Button.new_from_icon_name("gtk-close", Gtk.IconSize(1))
+        #self.close.set_label(_("Close"))
+        close.connect("clicked", lambda w: Gtk.main_quit())
+        buttonbox.add(close)
+
+        self.loopkill=False
+        if Var.blank_time == 0 :
+            self.switch.set_active(False)
+            self.toggle_sensitive(0)
+        else:
+            self.switch.set_active(True)
+            self.toggle_sensitive(1)
+
+Var().read()
+win = mainWindow()
+win.connect("delete-event", Gtk.main_quit)
+win.show_all()
+Gtk.main()

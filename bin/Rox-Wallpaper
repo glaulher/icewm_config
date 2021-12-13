@@ -1,0 +1,50 @@
+#!/bin/bash
+
+help() {
+    echo "Usage:"
+    echo "Example: Rox-Wallpaper /path/to/wallpaper.jpg";
+    echo "Example 2: Rox-Wallpaper --centre /path/to/wallpaper";
+    echo "-sc | -SC | --scale     Scale the wallpaper to the screen";
+    echo "-st | -ST | --stretch   Stretch the wallpaper to the screen";
+    echo "-f  | -F  | --fit       Fit the wallpaper to the screen";
+    echo "-c  | -C  | --centre    Centre the wallpaper on the screen";
+    echo "-t  | -T  | --tile      Tile the wallpaper on the screen";
+    echo "-h  | -H  | --help      This help text";
+    echo "";
+    exit;
+    }
+
+for option in "$@"
+do
+    case $option in
+        --help|-h|-H)      help            ;;
+        --scale|-sc|-SC)   style="scale"   ;;
+        --stretch|-st|-ST) style="stretch" ;;
+        --fit|-f|-F)       style="fit"     ;;
+        --centre|-c|-C)    style="centre"  ;;
+        --tile|-t|-T)      style="tile"    ;;
+        *)
+            if [[ -f "$option" ]]; then
+                filename="$option"
+            else
+                echo "Passed option '$option', is not a valid option of a correct file path";
+            fi
+        ;;
+    esac
+        
+done
+
+if [ -z "$style" ]; then style="stretch"; fi
+
+rox --RPC << EOF
+<?xml version="1.0"?>
+<env:Envelope xmlns:env="http://www.w3.org/2001/12/soap-envelope">
+ <env:Body xmlns="http://rox.sourceforge.net/SOAP/ROX-Filer">
+  <SetBackdrop>
+   <Filename>$filename</Filename>
+   <Style>$style</Style>
+  </SetBackdrop>
+ </env:Body>
+</env:Envelope>
+
+EOF

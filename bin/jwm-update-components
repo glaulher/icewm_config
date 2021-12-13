@@ -1,0 +1,3 @@
+#!/bin/bash
+jwm-icon-paths --reverse --file ~/.jwm/iconpaths
+desktop-menu --write-out-global

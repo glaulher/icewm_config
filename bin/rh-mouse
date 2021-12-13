@@ -1,0 +1,7 @@
+#!/bin/bash
+#Name: rh-mouse.sh
+#Depends: desktop-session-antix
+#Author: anticapitalista <anticapitalista@riseup.net>
+#Purpose: Set permanent left hand mouse
+
+sh -c 'xmodmap -e "pointer = 1 2 3 4 5" '

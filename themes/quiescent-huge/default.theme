@@ -1,0 +1,132 @@
+ThemeAuthor="Impuwat"
+ThemeDescription="quiescent"
+
+Gradients="menubg.xpm menusel.xpm workspacebuttonactive.xpm taskbuttonactive.xpm"
+Look=flat
+
+RolloverButtonsSupported=0 # 0 / 1
+TitleButtonsSupported="dhimrsx"
+# TitleButtonsLeft="d"
+# TitleButtonsRight="xsmi"
+
+#Colors
+
+ColorNormalBorder="#CCB8A9"
+ColorActiveBorder="#ccb8a9"
+ColorNormalButton="#000000"
+ColorNormalTitleBar="#CCB8A9"
+ColorActiveTitleBar="#CCB8A9"
+ColorNormalTitleBarText="rgb:cc/b8/a9"
+ColorActiveTitleBarText="#rgb:00/00/00"
+
+ColorNormalMenu="#000000"
+ColorActiveMenuItem="#4c3c32"
+ColorNormalMenuItemText="#B6A699"
+ColorActiveMenuItemText="#000000"
+ColorDisabledMenuItemText="#665D56"
+ColorDisabledMenuItemShadow="rgb:d6/d6/d6"
+
+ColorMoveSizeStatus="#CCB8A9"
+ColorMoveSizeStatusText="#000000"
+ColorScrollBar="#EAEAEA"
+ColorScrollBarSlider="#EAEAEA"
+ColorScrollBarButton="#EAEAEA"
+ColorScrollBarButtonArrow="#000000"
+
+ColorActiveTitleBarText="#000000"
+ColorNormalTitleBarText="rgb:cc/b8/a9"
+#ColorActiveTitleBarShadow="rgb:00/00/00"
+ColorNormalTitleBarShadow="rgb:00/00/00"
+ColorDialog="rgb:d6/d6/d6"
+ColorLabel="rgb:d6/d6/d6"
+
+ColorQuickSwitch="rgb:d6/d6/d6"
+ColorQuickSwitchText="rgb:00/00/00"
+ColorQuickSwitchActive="rgb:55/66/88"
+
+ColorListBox="rgb:d6/d6/d6"
+ColorListBoxText="rgb:00/00/00"
+ColorListBoxSelection="rgb:55/66/88"
+ColorListBoxSelectionText="rgb:ff/ff/ff"
+
+ColorClock=""
+ColorClockText="#b6a699"
+
+ColorApm="#000000"			# Background colour of APM monitor, ""=force transparency
+ApmFontNameXft="sans:size=14"
+ColorApmText="#FFFFFF"
+
+ColorNetIdle="#000000"			# Background colour of the network monitor, 
+ColorNetReceive="#FFFF00"		# Incoming load on the network monitor
+ColorNetSend="#00FF00"			# Outgoing load on the network monitor
+
+ColorCPUStatusIdle="#000000"		# Background colour of the CPU monitor, ""=force transparency
+ColorCPUStatusUser="#FF0000"		# User load on the CPU monitor
+ColorCPUStatusSystem="#C000C0"		# System load on the CPU monitor
+ColorCPUStatusNice="#000000"		# Nice load on the CPU monitor
+
+ColorToolTip="#FFE28A"
+ColorToolTipText="#323232"
+
+ColorInput="#BAA89A"
+ColorInputText="#000000"
+ColorInputSelection="rgb:55/66/88"
+ColorInputSelectionText="rgb:ff/ff/ff"
+
+ColorNormalWorkspaceButtonText="#ccb8a9"
+ColorActiveWorkspaceButtonText="rgb:00/00/00"
+
+ColorDefaultTaskBar="#4C3C32"
+ColorNormalTaskBarApp="#4C3C32"
+ColorNormalTaskBarAppText="#CCB8A9"
+ColorActiveTaskBarApp="#8A7E74"
+ColorActiveTaskBarAppText="#000000"
+ColorMinimizedTaskBarApp="#CCB8A9"
+ColorMinimizedTaskBarAppText="#ccb8a9"
+
+# Font Specification
+TitleFontNameXft		=	sans:size=14:bold
+MenuFontNameXft			=	sans:size=14
+MinimizedWindowFontNameXft	=	sans:size=14:bold
+ActiveButtonFontNameXft		=	sans:size=14:bold
+NormalButtonFontNameXft		=	sans:size=14
+ToolButtonFontNameXft		=	sans:size=14
+NormalWorkspaceFontNameXft	=	sans:size=14
+ActiveWorkspaceFontNameXft	=	sans:size=14
+QuickSwitchFontNameXft		=	sans:size=14
+ListBoxFontNameXft		=	sans:size=14
+StatusFontNameXft		=	sans:size=14
+ToolTipFontNameXft		=	sans:size=14
+ActiveTaskBarFontNameXft	=	sans:size=14
+NormalTaskBarFontNameXft	=	sans:size=14
+ClockFontNameXft		=	sans:size=14
+InputFontNameXft		=	sans:size=14
+
+TaskBarClockLeds=0
+#Sizes
+
+TitleBarHeight=22
+TitleBarHorzOffset=5 # -128-128
+
+BorderSizeX=2 # 0-128
+BorderSizeY=2 # 0-128
+CornerSizeX=20 # 0-64
+CornerSizeY=20 # 0-64
+
+DlgBorderSizeX=2 # 0-128
+DlgBorderSizeY=2 # 0-128
+
+ShapesProtectClientWindow=1 # 0 / 1
+
+MenuIconSize=44		        # Menu. 
+SmallIconSize=44			# Taskbar & Titlebar. Taskbar height = height of linux.xpm. Titlebar height = TitleBarHeight in *.theme
+LargeIconSize=64			# Quickswitch window
+HugeIconSize=96				# ?  Cannot identify what it applies to
+ShowMenuButtonIcon=0			# Show application icon on menuButton
+
+# --------------------
+# Desktop
+# --------------------
+DesktopBackgroundImage=""		# Prevent IceWM showing a background image
+DesktopBackgroundColor=""		# Prevent IceWM showing a background colour
+#DesktopBackgroundCenter=1		# 0=tile 1=fill screen with single image

@@ -1,0 +1,75 @@
+#!/bin/bash
+#Name: ds-mouse
+#Version:
+#Depends: ds-mouse.py, xset
+#Author: Dave (david@daveserver.info), 2017
+#License: GPL v.3
+#Purpose: Configure mouse on per user basis for a session. This is the gui frontend
+
+TEXTDOMAINDIR=/usr/share/locale
+TEXTDOMAIN=ds-mouse
+
+conf_dir="$HOME/.desktop-session"
+conf_file="$conf_dir/mouse.conf"
+if [ ! -f "$conf_file" ]; then
+    conf_file="/etc/desktop-session/mouse.conf"
+fi
+
+function acceleration() {
+    acceleration="$(cat $conf_file | grep '^ACCELERATION' |cut -d '=' -f2 |cut -d ' ' -f2)"
+    threshold="$(cat $conf_file | grep '^THRESHOLD' |cut -d '=' -f2 |cut -d ' ' -f2)"
+    if [ "$acceleration" -gt -1 -a "$acceleration" -lt 17 ] && [ "$threshold" -gt -1 -a "$threshold" -lt 101 ]; then
+       xset m "$acceleration" "$threshold"
+    else
+       echo $"out-of-range value for acceleration or threshold, so applying xset default values"
+       xset m default
+    fi
+}
+
+function buttonorder() {
+    buttonorder="$(cat $conf_file | grep '^BUTTONORDER' |cut -d '=' -f2 |cut -d ' ' -f2)"
+    case $buttonorder in
+        0)    xmodmap -e 'pointer = 1 2 3 4 5' > /dev/null 2>&1 ;;
+        1)    xmodmap -e 'pointer = 3 2 1 4 5' > /dev/null 2>&1 ;;
+        *)    xmodmap -e 'pointer = 1 2 3 4 5' > /dev/null 2>&1 ;;
+    esac
+}
+
+function size() {
+    size="$(cat $conf_file | grep '^SIZE' |cut -d '=' -f2 |cut -d ' ' -f2)"
+    file="$HOME/.Xdefaults";
+
+    if [ "$size" -gt 9 ]; then
+        if cat $file |grep "Xcursor.size:"  > /dev/null ; then
+            sed -i "s/Xcursor\.size.*/Xcursor\.size:$size/ig" $file
+        else
+            echo "Xcursor.size:$size" > $file
+        fi
+    else
+        sed -n -i "s/Xcursor\.size*//ig" $file > /dev/null 2>&1
+    fi
+}
+
+function help() {
+    echo $"Help:";
+    echo $"-a   | set mouse motion (acceleration and threshold)";
+    echo $"-b   | set button order for left and right hand";
+    echo $"-s   | set cursor size";
+    echo $"-all | set mouse motion, button order, and cursor size";
+    echo $"-h   | show this help dialog";
+    echo $"No option start settings gui";
+}
+
+action="$1" && shift;
+case  $action in 
+    -a)	acceleration ;;
+    -o) buttonorder  ;;
+    -s) size         ;;
+    -all)
+        acceleration;
+        buttonorder;
+        size;
+    ;;
+    -h) help         ;;
+    *)  /usr/local/bin/ds-mouse.py ;;
+esac

@@ -1,0 +1,1 @@
+desktop-menu --menu-file='/etc/xdg/menus/TCM-MENU.menu' --write-out --write-out-file='personal'
